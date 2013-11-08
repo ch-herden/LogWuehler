@@ -81,7 +81,7 @@ class Index {
 	 * @param array $url
 	 */
 	private function _setControllerName($url) {
-		if (key_exists(0, $url)) {
+		if (array_key_exists(0, $url)) {
 			$this->_controller = $url[0];
 		} else {
 			$this->_controller = 'index';
@@ -93,7 +93,7 @@ class Index {
 	 * @param array $url
 	 */
 	private function _setActionName($url) {
-		if (key_exists(1, $url)) {
+		if (array_key_exists(1, $url)) {
 			$this->_action = $url[1];
 		} else {
 			$this->_action = 'index';
