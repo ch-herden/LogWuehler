@@ -9,11 +9,24 @@
 class Index {
 
 	/**
+	 * Controllername
+	 * @var String
+	 */
+	protected $_controller;
+	
+	/**
+	 * Actionname
+	 * @var String
+	 */
+	protected $_action;
+
+	/**
 	 * Perform
 	 */
 	public function __construct() {
 		$this->_checkPhpVersion();
 		$this->_registerNamespaces();
+		$this->_initRoute();
 	}
 
 	/**
@@ -34,6 +47,46 @@ class Index {
 		require_once 'vendor/SplClassLoader/SplClassLoader.php';
 		$loader = new SplClassLoader('Application', '../');
 		$loader->register();
+	}
+	
+	/**
+	 * Set controller and action name from url
+	 */
+	protected function _initRoute() {
+		$url = filter_input(INPUT_SERVER, 'REQUEST_URI');
+		
+		$position = strpos($url, '?');
+		if($position !== false) {
+			$url = substr($url, 0, $position);
+		}
+		$urlArray = explode('/', trim($url, '/'));
+		
+		$this->_setControllerName($urlArray);
+		$this->_setActionName($urlArray);
+	}
+	
+	/**
+	 * Set controllername from url array
+	 * @param array $url
+	 */
+	private function _setControllerName($url) {
+		if(key_exists(0, $url)) {
+			$this->_controller = $url[0];
+		} else {
+			$this->_controller = 'index';
+		}
+	}
+	
+	/**
+	 * Set actionname from url array
+	 * @param array $url
+	 */
+	private function _setActionName($url) {
+		if(key_exists(1, $url)) {
+			$this->_action = $url[1];
+		} else {
+			$this->_action = 'index';
+		}
 	}
 	
 }
