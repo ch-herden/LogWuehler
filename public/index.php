@@ -14,7 +14,7 @@ class Index {
 	 * @var String
 	 */
 	protected $_controller;
-	
+
 	/**
 	 * Actionname
 	 * @var String
@@ -22,15 +22,22 @@ class Index {
 	protected $_action;
 
 	/**
+	 * View params
+	 * @var array
+	 */
+	protected $_viewParams;
+	
+	/**
 	 * Perform
 	 */
 	public function __construct() {
 		define('APPLICATION_PATH', filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'));
-		
+
 		$this->_checkPhpVersion();
 		$this->_registerNamespaces();
 		$this->_setRoute();
 		$this->_checkConfigFile();
+		$this->_initRoute();
 	}
 
 	/**
@@ -52,57 +59,84 @@ class Index {
 		$loader = new SplClassLoader('Application', APPLICATION_PATH);
 		$loader->register();
 	}
-	
+
 	/**
 	 * Set controller and action name from url
 	 */
 	protected function _setRoute() {
 		$url = filter_input(INPUT_SERVER, 'REQUEST_URI');
-		
+
 		$position = strpos($url, '?');
-		if($position !== false) {
+		if ($position !== false) {
 			$url = substr($url, 0, $position);
 		}
 		$urlArray = explode('/', trim($url, '/'));
-		
+
 		$this->_setControllerName($urlArray);
 		$this->_setActionName($urlArray);
 	}
-	
+
 	/**
 	 * Set controllername from url array
 	 * @param array $url
 	 */
 	private function _setControllerName($url) {
-		if(key_exists(0, $url)) {
+		if (key_exists(0, $url)) {
 			$this->_controller = $url[0];
 		} else {
 			$this->_controller = 'index';
 		}
 	}
-	
+
 	/**
 	 * Set actionname from url array
 	 * @param array $url
 	 */
 	private function _setActionName($url) {
-		if(key_exists(1, $url)) {
+		if (key_exists(1, $url)) {
 			$this->_action = $url[1];
 		} else {
 			$this->_action = 'index';
 		}
 	}
-	
+
 	/**
 	 * Check config file
 	 */
 	protected function _checkConfigFile() {
-		if(!file_exists(APPLICATION_PATH . '/Application/config/app.ini')) {
+		if (!file_exists(APPLICATION_PATH . '/Application/config/app.ini')) {
 			$this->_controller = 'install';
 			$this->_action = 'index';
 		}
 	}
-	
+
+	protected function _initRoute() {
+		$conNamespace = '\Application\Controller\\' . ucfirst($this->_controller) . 'Controller';
+		$action = $this->_action . 'Action';
+		
+		if (!class_exists($conNamespace)) {
+			$this->_sendNotFound();
+		}
+
+		$controller = new $conNamespace();
+		
+		if(!method_exists($controller, $action)) {
+			$this->_sendNotFound();
+		}
+		
+		$this->_viewParams = $conNamespace->{$action}();
+	}
+
+	/**
+	 * Send 404 header
+	 */
+	protected function _sendNotFound() {
+		header('HTTP/1.0 404 Not Found');
+		echo "<h1>404 Not Found</h1>";
+		echo "The page that you have requested could not be found.";
+		exit();
+	}
+
 }
 
 $index = new Index();
