@@ -25,9 +25,12 @@ class Index {
 	 * Perform
 	 */
 	public function __construct() {
+		define('APPLICATION_PATH', filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'));
+		
 		$this->_checkPhpVersion();
 		$this->_registerNamespaces();
-		$this->_initRoute();
+		$this->_setRoute();
+		$this->_checkConfigFile();
 	}
 
 	/**
@@ -46,14 +49,14 @@ class Index {
 	 */
 	protected function _registerNamespaces() {
 		require_once 'vendor/SplClassLoader/SplClassLoader.php';
-		$loader = new SplClassLoader('Application', '../');
+		$loader = new SplClassLoader('Application', APPLICATION_PATH);
 		$loader->register();
 	}
 	
 	/**
 	 * Set controller and action name from url
 	 */
-	protected function _initRoute() {
+	protected function _setRoute() {
 		$url = filter_input(INPUT_SERVER, 'REQUEST_URI');
 		
 		$position = strpos($url, '?');
@@ -86,6 +89,16 @@ class Index {
 		if(key_exists(1, $url)) {
 			$this->_action = $url[1];
 		} else {
+			$this->_action = 'index';
+		}
+	}
+	
+	/**
+	 * Check config file
+	 */
+	protected function _checkConfigFile() {
+		if(!file_exists(APPLICATION_PATH . '/Application/config/app.ini')) {
+			$this->_controller = 'install';
 			$this->_action = 'index';
 		}
 	}
