@@ -39,3 +39,4 @@ class Index {
 }
 
 $index = new Index();
+echo 'blub';
