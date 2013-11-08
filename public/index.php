@@ -13,7 +13,7 @@ class Index {
 	 */
 	public function __construct() {
 		$this->_checkPhpVersion();
-		$this->_loadNamespaces();
+		$this->_registerNamespaces();
 	}
 
 	/**
@@ -28,9 +28,9 @@ class Index {
 	}
 
 	/**
-	 * Load namespaces
+	 * Register namespaces
 	 */
-	protected function _loadNamespaces() {
+	protected function _registerNamespaces() {
 		require_once 'vendor/SplClassLoader/SplClassLoader.php';
 		$loader = new SplClassLoader('Application', '../');
 		$loader->register();
