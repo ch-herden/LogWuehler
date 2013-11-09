@@ -31,8 +31,8 @@ class Index {
 	 * Perform
 	 */
 	public function __construct() {
-		define('APPLICATION_PATH', filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'));
-
+		define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../'));
+		
 		$this->_checkPhpVersion();
 		$this->_registerNamespaces();
 		$this->_setRoute();
@@ -56,7 +56,7 @@ class Index {
 	 * Register namespaces
 	 */
 	protected function _registerNamespaces() {
-		require_once 'vendor/SplClassLoader/SplClassLoader.php';
+		require_once APPLICATION_PATH . '/vendor/SplClassLoader/SplClassLoader.php';
 		$loader = new SplClassLoader('Application', APPLICATION_PATH);
 		$loader->register();
 	}
