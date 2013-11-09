@@ -124,7 +124,7 @@ class Index {
 			$this->_sendNotFound();
 		}
 		
-		$this->_viewParams = $conNamespace->{$action}();
+		$this->_viewParams = $controller->{$action}();
 	}
 
 	/**
