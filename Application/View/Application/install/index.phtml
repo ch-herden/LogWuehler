@@ -1,0 +1,26 @@
+<h2>Installation</h2>
+
+<form role="form" action="/install/save" method="post">
+
+	<div class="well">
+		<h3>Abhängigkeiten</h3>
+
+		Schreibrechte im Config Ordner
+		<?php if ($this->_view['permission'] == true): ?>
+			<span class="label label-success">TRUE</span>
+		<?php else: ?>
+			<span class="label label-danger">FALSE</span>
+		<?php endif; ?>
+	</div>
+
+	<div class="well">
+		<h3>Pfade</h3>
+
+		<div class="form-group">
+			<label for="exampleInputEmail1">Apache Error Log</label>
+			<input type="text" value="/var/log/apache2" class="form-control" />
+		</div>
+	</div>
+
+	<input type="submit" class="btn btn-primary btn-lg" value="Installieren" <?= ($this->_view['permission'] != true) ? 'disabled="disabled"' : '' ?> />
+</form>

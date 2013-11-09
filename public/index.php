@@ -105,7 +105,7 @@ class Index {
 	 * Check config file
 	 */
 	protected function _checkConfigFile() {
-		if (!file_exists(APPLICATION_PATH . '/Application/config/app.ini')) {
+		if (!file_exists(APPLICATION_PATH . '/Application/config/app.ini') && $this->_controller != 'install') {
 			$this->_controller = 'install';
 			$this->_action = 'index';
 		}
