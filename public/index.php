@@ -25,8 +25,8 @@ class Index {
 	 * View params
 	 * @var array
 	 */
-	protected $_viewParams;
-	
+	protected $_view;
+
 	/**
 	 * Perform
 	 */
@@ -38,6 +38,7 @@ class Index {
 		$this->_setRoute();
 		$this->_checkConfigFile();
 		$this->_initRoute();
+		$this->_renderLayout();
 	}
 
 	/**
@@ -113,18 +114,56 @@ class Index {
 	protected function _initRoute() {
 		$conNamespace = '\Application\Controller\\' . ucfirst($this->_controller) . 'Controller';
 		$action = $this->_action . 'Action';
-		
+
 		if (!class_exists($conNamespace)) {
 			$this->_sendNotFound();
 		}
 
 		$controller = new $conNamespace();
-		
-		if(!method_exists($controller, $action)) {
+
+		if (!method_exists($controller, $action)) {
 			$this->_sendNotFound();
 		}
-		
-		$this->_viewParams = $controller->{$action}();
+
+		$this->_view = $controller->{$action}();
+		if (!is_array($this->_view)) {
+			$this->_view = array();
+		}
+	}
+
+	/**
+	 * Render layout
+	 * @throws Exception
+	 */
+	protected function _renderLayout() {
+		if (array_key_exists('layout', $this->_view) && $this->_view['layout'] == false) {
+			$this->_renderView();
+			return;
+		}
+
+		if (!file_exists(APPLICATION_PATH . '/Application/View/Layout/layout.phtml')) {
+			throw new Exception('layout.phtml not found');
+		}
+
+		require_once APPLICATION_PATH . '/Application/View/Layout/layout.phtml';
+	}
+
+	/**
+	 * Render view
+	 */
+	protected function _renderView() {
+		if (array_key_exists('view', $this->_view) && $this->_view['view'] == false) {
+			return;
+		}
+
+		$file = APPLICATION_PATH . '/Application/View/Application/';
+		$file .= $this->_controller . '/' . $this->_action . '.phtml';
+
+		if (!file_exists($file)) {
+			$this->_sendNotFound();
+		}
+
+		require_once $file;
 	}
 
 	/**
