@@ -18,9 +18,30 @@
 
 		<div class="form-group">
 			<label for="exampleInputEmail1">Apache Error Log</label>
-			<input type="text" value="/var/log/apache2" class="form-control" />
+			<input type="text" name="apacheErrorLog" value="/var/log/apache2" class="form-control" />
 		</div>
 	</div>
 
 	<input type="submit" class="btn btn-primary btn-lg" value="Installieren" <?= ($this->_view['permission'] != true) ? 'disabled="disabled"' : '' ?> />
 </form>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	$('form').validate({
+		rules: {
+			apacheErrorLog: "required"
+		},
+		messages: {
+			apacheErrorLog: ""
+		},
+		showErrors: function(errorMap, errorList) {
+			$('.form-group').removeClass('has-error');
+			for(i = 0; i < errorList.length; i++) {
+				$(errorList[i].element).parent().addClass('has-error');
+			}
+		}
+	});
+});
+
+</script>
