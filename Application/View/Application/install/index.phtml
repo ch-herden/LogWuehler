@@ -1,6 +1,6 @@
 <h2>Installation</h2>
 
-<form role="form" action="/install/save" method="post">
+<form role="form" action="/install/index" method="post">
 
 	<div class="well">
 		<h3>Abhängigkeiten</h3>
@@ -13,6 +13,19 @@
 		<?php endif; ?>
 	</div>
 
+	<?php if($this->_view['success'] === true): ?>
+	<div class="alert alert-success">
+		LogWuehler wurde erfolgreich installiert.<br />
+		<a href="/">Weiter</a>
+	</div>
+	<?php endif; ?>
+	<?php if($this->_view['error'] === true): ?>
+	<div class="alert alert-danger">
+		 <strong>Fehler!</strong><br />
+		 Das Verzeichnis existiert nicht, oder es bestehen keine Leserechte.
+	</div>
+	<?php endif; ?>
+	
 	<div class="well">
 		<h3>Pfade</h3>
 

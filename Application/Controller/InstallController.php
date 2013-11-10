@@ -13,9 +13,26 @@ class InstallController {
 	
 	public function indexAction() {
 		$this->_checkConfigFile();
-		
-		$view = array();
+		$view = array(
+			'permission' => $this->_checkRights(),
+			'error' => false,
+			'success' => false
+		);
 		$view['permission'] = $this->_checkRights();
+		
+		$postParams = filter_input_array(INPUT_POST);
+		if(!is_null($postParams)) {
+			$path = realpath($postParams['apacheErrorLog']);
+			$view['error'] = is_readable($path);
+			if($view['error'] === false) {
+				$handle = fopen(APPLICATION_PATH . '/Application/config/app.ini', "w");
+				fwrite($handle, '[paths]' . "\n");
+				fwrite($handle, 'apache.error="' . $path . '"' . "\n");
+				fclose($handle);
+				
+				$view['success'] = true;
+			}
+		}
 		
 		return $view;
 	}
