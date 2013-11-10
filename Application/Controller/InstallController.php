@@ -11,6 +11,10 @@ namespace Application\Controller;
  */
 class InstallController {
 	
+	/**
+	 * Index action
+	 * @return array
+	 */
 	public function indexAction() {
 		$this->_checkConfigFile();
 		$view = array(
@@ -37,6 +41,9 @@ class InstallController {
 		return $view;
 	}
 	
+	/**
+	 * Check if config file exists
+	 */
 	protected function _checkConfigFile() {
 		if (file_exists(APPLICATION_PATH . '/Application/config/app.ini')) {
 			header("Location: /");
@@ -44,6 +51,10 @@ class InstallController {
 		}
 	}
 	
+	/**
+	 * Check write right for config path
+	 * @return boolean
+	 */
 	protected function _checkRights() {
 		return is_writable(APPLICATION_PATH . '/Application/config');
 	}
