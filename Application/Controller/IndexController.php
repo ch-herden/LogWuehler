@@ -15,12 +15,21 @@ class IndexController {
 	
 	/**
 	 * Index Action
+	 * @return array
 	 */
 	public function indexAction() {
 		$fileMapper = new Mapper\File();
 		return array(
 			'apacheErrorLogFiles' => $fileMapper->getApacheErrorLogFiles()
 		);
+	}
+	
+	/**
+	 * Action for show log
+	 * @return array
+	 */
+	public function showAction() {
+		return array();
 	}
 	
 }
