@@ -82,7 +82,7 @@ class Index {
 	 * @param array $url
 	 */
 	private function _setControllerName($url) {
-		if (array_key_exists(0, $url) && count($url[0]) > 1) {
+		if (array_key_exists(0, $url) && strlen($url[0]) > 1) {
 			$this->_controller = $url[0];
 		} else {
 			$this->_controller = 'index';
