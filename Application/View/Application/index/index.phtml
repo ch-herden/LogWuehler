@@ -1,0 +1,5 @@
+<div class="well">
+	<?php foreach ($this->_view['apacheErrorLogFiles'] as $link => $file): ?>
+		<p><a href="/index/show?dir=<?= $link ?>"><?= $file ?></a></p>
+	<?php endforeach; ?>
+</div>

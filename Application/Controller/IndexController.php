@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Mapper;
+
 /**
  * Index controller
  * 
@@ -15,7 +17,10 @@ class IndexController {
 	 * Index Action
 	 */
 	public function indexAction() {
-		
+		$fileMapper = new Mapper\File();
+		return array(
+			'apacheErrorLogFiles' => $fileMapper->getApacheErrorLogFiles()
+		);
 	}
 	
 }
