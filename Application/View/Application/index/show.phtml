@@ -1,0 +1,71 @@
+<div class="well row">
+	<div class="col-md-3">
+		<table>
+			<tr>
+				<td>Von:</td>
+				<td>
+					<input type="text" id="time_start" class="form-control jsDate" value="<?= date("d.m.Y") ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td>Bis:</td>
+				<td>
+					<input type="text" id="time_end" class="form-control jsDate" value="<?= date("d.m.Y") ?>" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="col-md-2">
+		<select id="level" class="form-control">
+			<option selected="selected">Alle</option>
+			<option>[emerg]</option>
+			<option>[alert]</option>
+			<option>[crit]</option>
+			<option>[error]</option>
+			<option>[warn]</option>
+			<option>[notice]</option>
+			<option>[info]</option>
+			<option>[debug]</option>
+		</select>
+	</div>
+	<div class="col-md-5">
+		<div class="input-group">
+			<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+			<input type="text" id="term" class="form-control" placeholder="Suchbegriff">
+		</div>
+	</div>
+	<div class="col-md-2">
+		<button type="button" class="btn btn-primary btn-block">Anzeigen</button>
+	</div>
+</div>
+
+<div class="well row jsContent">
+	<div id="jsLoad" class="text-center hide">
+		<img src="/images/ajax-loader.gif" />
+	</div>
+	<div id="jsContentFailed" class="text-center hide">Keine Ergebnisse gefunden</div>
+	<div id="jsContentSuccess" class="hide"></div>
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		$('.jsDate').datepicker({dateFormat: "dd.mm.yy"});
+		
+		$('button').on('click', function() {
+			$('.well.jsContent > div').addClass('hide');
+			$('#jsLoad').removeClass('hide');
+			
+			var params = {
+				time_start: $('#time_start').val(),
+				time_end: $('#time_end').val(),
+				level: $('#level').val(),
+				term: $('#term').val()
+			};
+			$.post('/index/data', params, function(data) {
+				
+			});
+		});
+	});
+
+</script>
