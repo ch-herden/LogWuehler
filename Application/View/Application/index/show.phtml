@@ -45,14 +45,15 @@
 	</div>
 	<div id="jsContentFailed" class="text-center hide">Keine Ergebnisse gefunden</div>
 	<div id="jsContentSuccess" class="hided">
-		<table class="table">
+		<table class="table jsContent">
 			<thead>
 				<tr>
-					<th></th>
+					<th>Level</th>
 					<th>Zeitpunkt</th>
 					<th>Nachricht</th>
 				</tr>
 			</thead>
+			<tbody></tbody>
 		</table>
 	</div>
 </div>
@@ -63,8 +64,7 @@
 		$('.jsDate').datepicker({dateFormat: "dd.mm.yy"});
 		
 		$('button').on('click', function() {
-			$('.well.jsContent > div').addClass('hide');
-			$('#jsLoad').removeClass('hide');
+			content.showLoadingWindow();
 			
 			var params = {
 				time_start: $('#time_start').val(),
@@ -73,9 +73,44 @@
 				term: $('#term').val()
 			};
 			$.post('/index/data', params, function(data) {
+				try {
+					data = JSON.parse(data);
+				} catch(e) {
+					content.showError();
+					return;
+				}
 				
+				content.putContentInTable(data);
 			});
 		});
+		
+		var content = {
+			showError: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsContentFailed').removeClass('hide');
+			},
+			showData: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsContentSuccess').removeClass('hide');
+			},
+			showLoadingWindow: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsLoad').removeClass('hide');
+			},
+			putContentInTable: function(data) {
+				var content = '';
+				for(var i = 0; i < data.length; i++) {
+					content += '<tr>';
+					content += '<td>' + data[i].level + '</td>';
+					content += '<td>' + data[i].time + '</td>';
+					content += '<td>' + data[i].msg + '</td>';
+					content += '</tr>';
+				}
+				
+				$('table.jsContent tbody').html(content);
+				this.showData();
+			}
+		}
 	});
-
+	
 </script>
