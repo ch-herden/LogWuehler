@@ -27,7 +27,7 @@ class InstallController {
 		$postParams = filter_input_array(INPUT_POST);
 		if(!is_null($postParams)) {
 			$path = realpath($postParams['apacheErrorLog']);
-			$view['error'] = is_readable($path);
+			$view['error'] = !is_readable($path);
 			if($view['error'] === false) {
 				$handle = fopen(APPLICATION_PATH . '/Application/config/app.ini', "w");
 				fwrite($handle, '[paths]' . "\n");
