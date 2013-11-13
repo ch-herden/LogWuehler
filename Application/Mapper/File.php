@@ -43,6 +43,10 @@ class File {
 		$files = array();
 		
 		$data = scandir($path);
+		if(!is_array($data)) {
+			return $files;
+		}
+		
 		unset($data[0], $data[1]);
 		foreach($data as $value) {
 			if(is_dir($path . '/' . $value)) {
