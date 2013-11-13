@@ -32,4 +32,24 @@ class IndexController {
 		return array();
 	}
 	
+	/**
+	 * Action for get log data
+	 * @return array
+	 */
+	public function dataAction() {
+		
+		echo json_encode(array(
+			array(
+				'level' => 'warn',
+				'time' => '05.11.2013 12:49:23',
+				'msg' => "mod_fcgid: stderr: #0 /srv/www/xlocator.de/v2/live/webclient/library/Zend/Translate/Adapter.php(646): Zend_Translate_Adapter_Gettext->_loadTranslationData('/srv/www/xlocat...', 'de_DE', Array), referer: http://www2.xlocator.de/"
+			)
+		));
+		
+		return array(
+			'layout' => false,
+			'view' => false
+		);
+	}
+	
 }
