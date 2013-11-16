@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Service;
+
 /**
  * Install controller
  * 
@@ -19,22 +21,29 @@ class InstallController {
 		$this->_checkConfigFile();
 		$view = array(
 			'permission' => $this->_checkRights(),
-			'error' => false,
+			'error' => array(
+				'file' => false,
+				'apacheError' => false,
+				'apacheAccess' => false
+			),
 			'success' => false
 		);
 		$view['permission'] = $this->_checkRights();
 		
 		$postParams = filter_input_array(INPUT_POST);
 		if(!is_null($postParams)) {
-			$path = realpath($postParams['apacheErrorLog']);
-			$view['error'] = !is_readable($path);
-			if($view['error'] === false) {
-				$handle = fopen(APPLICATION_PATH . '/Application/config/app.ini', "w");
-				fwrite($handle, '[paths]' . "\n");
-				fwrite($handle, 'apache.error="' . $path . '"' . "\n");
-				fclose($handle);
-				
+			if(!$this->_createConfigDir()) {
+				$view['error']['file'] = true;
+				return $view;
+			}
+			
+			$service = new Service\ConfigFile($postParams);
+			$success = $service->perform();
+			
+			if($success === true) {
 				$view['success'] = true;
+			} else {
+				$view['error'] = $success;
 			}
 		}
 		
@@ -56,7 +65,27 @@ class InstallController {
 	 * @return boolean
 	 */
 	protected function _checkRights() {
-		return is_writable(APPLICATION_PATH . '/Application/config');
+		$perm = array(
+			'config' => is_writable(APPLICATION_PATH . '/Application'),
+			'phpversion' => true
+		);
+		
+		if (version_compare(phpversion(), "5.3.3", "<")) {
+			$perm['phpversion'] = false;
+		}
+		
+		return $perm;
+	}
+	
+	/**
+	 * Create config directory
+	 * @return boolean
+	 */
+	protected function _createConfigDir() {
+		if(!file_exists(APPLICATION_PATH . '/Application/config')) {
+			return mkdir(APPLICATION_PATH . '/Application/config');
+		}
+		return true;
 	}
 	
 }

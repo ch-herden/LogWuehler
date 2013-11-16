@@ -5,56 +5,81 @@
 	<div class="well">
 		<h3>Abhängigkeiten</h3>
 
-		Schreibrechte im Config Ordner
-		<?php if ($this->_view['permission'] == true): ?>
+		Schreibrechte im Application Ordner
+		<?php if ($this->_view['permission']['config'] == true): ?>
+			<span class="label label-success">TRUE</span>
+		<?php else: ?>
+			<span class="label label-danger">FALSE</span>
+		<?php endif; ?>
+		<br />
+		PHP Version >= 5.3.3
+		<?php if ($this->_view['permission']['phpversion'] == true): ?>
 			<span class="label label-success">TRUE</span>
 		<?php else: ?>
 			<span class="label label-danger">FALSE</span>
 		<?php endif; ?>
 	</div>
 
-	<?php if($this->_view['success'] === true): ?>
-	<div class="alert alert-success">
-		LogWuehler wurde erfolgreich installiert.<br />
-		<a href="/">Weiter</a>
-	</div>
+	<?php if ($this->_view['success'] === true): ?>
+			<div class="alert alert-success">
+				LogWuehler wurde erfolgreich installiert.<br />
+				<a href="/">Weiter</a>
+			</div>
 	<?php endif; ?>
-	<?php if($this->_view['error'] === true): ?>
-	<div class="alert alert-danger">
-		 <strong>Fehler!</strong><br />
-		 Das Verzeichnis existiert nicht, oder es bestehen keine Leserechte.
-	</div>
+	<?php if ($this->_view['error']['file'] === true): ?>
+			<div class="alert alert-danger">
+				 <strong>Fehler!</strong><br />
+				 Die Config Datei konnte nicht angelegt werden.
+			</div>
 	<?php endif; ?>
-	
-	<div class="well">
-		<h3>Pfade</h3>
 
-		<div class="form-group">
-			<label for="exampleInputEmail1">Apache Error Log</label>
-			<input type="text" name="apacheErrorLog" value="/var/log/apache2" class="form-control" />
+	<div class="row">
+		<div class="col-md-6">
+			<div class="well">
+				<?php if ($this->_view['error']['apacheError'] == true): ?>
+				<div class="alert alert-danger">
+					<strong>Fehler!</strong><br />
+					Das Verzeichnis existiert nicht, 
+					oder es bestehen nicht die nötigen Rechte.
+				</div>
+				<?php endif; ?>
+				
+				<h3>Apache Error Log</h3>
+
+				<div class="form-group">
+					<label>Pfad</label>
+					<input type="text" name="apacheErrorPath" value="/var/log/apache2" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label>Schlüsselwort</label>
+					<input type="text" name="apacheErrorKeyword" value="error" class="form-control" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-6">
+			<div class="well">
+				<?php if ($this->_view['error']['apacheAccess'] == true): ?>
+				<div class="alert alert-danger">
+					<strong>Fehler!</strong><br />
+					Das Verzeichnis existiert nicht, 
+					oder es bestehen nicht die nötigen Rechte.
+				</div>
+				<?php endif; ?>
+				
+				<h3>Apache Access Log</h3>
+
+				<div class="form-group">
+					<label>Pfad</label>
+					<input type="text" name="apacheAccessPath" value="/var/log/apache2" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label>Schlüsselwort</label>
+					<input type="text" name="apacheAccessKeyword" value="access" class="form-control" />
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<input type="submit" class="btn btn-primary btn-lg" value="Installieren" <?= ($this->_view['permission'] != true) ? 'disabled="disabled"' : '' ?> />
+	<input type="submit" class="btn btn-primary btn-lg" value="Installieren" <?= (array_search(false, $this->_view['permission']) !== false) ? 'disabled="disabled"' : '' ?> />
 </form>
-
-<script type="text/javascript">
-
-$(document).ready(function() {
-	$('form').validate({
-		rules: {
-			apacheErrorLog: "required"
-		},
-		messages: {
-			apacheErrorLog: ""
-		},
-		showErrors: function(errorMap, errorList) {
-			$('.form-group').removeClass('has-error');
-			for(i = 0; i < errorList.length; i++) {
-				$(errorList[i].element).parent().addClass('has-error');
-			}
-		}
-	});
-});
-
-</script>
