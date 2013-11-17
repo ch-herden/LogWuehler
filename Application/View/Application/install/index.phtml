@@ -2,6 +2,21 @@
 
 <form role="form" action="/install/index" method="post">
 
+	<?php
+	$https = filter_input(INPUT_SERVER, 'HTTPS');
+	if (empty($https)): 
+	?>
+		<div class="alert alert-warning">
+			LogWuehler wurde nicht über HTTPS aufgerufen.
+		</div>
+	<?php endif; ?>
+	
+	<?php if(is_null(filter_input(INPUT_SERVER, 'PHP_AUTH_USER'))): ?>
+	<div class="alert alert-warning">
+		Diese Seite ist nicht über HTTP Authentifizierung geschützt.
+	</div>
+	<?php endif; ?>
+
 	<div class="well">
 		<h3>Abhängigkeiten</h3>
 
@@ -21,29 +36,29 @@
 	</div>
 
 	<?php if ($this->_view['success'] === true): ?>
-			<div class="alert alert-success">
-				LogWuehler wurde erfolgreich installiert.<br />
-				<a href="/">Weiter</a>
-			</div>
+		<div class="alert alert-success">
+			LogWuehler wurde erfolgreich installiert.<br />
+			<a href="/">Weiter</a>
+		</div>
 	<?php endif; ?>
 	<?php if ($this->_view['error']['file'] === true): ?>
-			<div class="alert alert-danger">
-				 <strong>Fehler!</strong><br />
-				 Die Config Datei konnte nicht angelegt werden.
-			</div>
+		<div class="alert alert-danger">
+			<strong>Fehler!</strong><br />
+			Die Config Datei konnte nicht angelegt werden.
+		</div>
 	<?php endif; ?>
 
 	<div class="row">
 		<div class="col-md-6">
 			<div class="well">
 				<?php if ($this->_view['error']['apacheError'] == true): ?>
-				<div class="alert alert-danger">
-					<strong>Fehler!</strong><br />
-					Das Verzeichnis existiert nicht, 
-					oder es bestehen nicht die nötigen Rechte.
-				</div>
+					<div class="alert alert-danger">
+						<strong>Fehler!</strong><br />
+						Das Verzeichnis existiert nicht, 
+						oder es bestehen nicht die nötigen Rechte.
+					</div>
 				<?php endif; ?>
-				
+
 				<h3>Apache Error Log</h3>
 
 				<div class="form-group">
@@ -56,17 +71,17 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-md-6">
 			<div class="well">
 				<?php if ($this->_view['error']['apacheAccess'] == true): ?>
-				<div class="alert alert-danger">
-					<strong>Fehler!</strong><br />
-					Das Verzeichnis existiert nicht, 
-					oder es bestehen nicht die nötigen Rechte.
-				</div>
+					<div class="alert alert-danger">
+						<strong>Fehler!</strong><br />
+						Das Verzeichnis existiert nicht, 
+						oder es bestehen nicht die nötigen Rechte.
+					</div>
 				<?php endif; ?>
-				
+
 				<h3>Apache Access Log</h3>
 
 				<div class="form-group">
