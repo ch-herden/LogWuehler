@@ -11,5 +11,5 @@ LogWuehler
 
 ### Feedback
 Any feedback, suggestions, criticism, doesn't matter if good or not?
-Add an issue or send us an email (contact@chris-herden.de) to improve our software!
+Add an issue or send me an email (contact@chris-herden.de) to improve our software!
 Thank you!
