@@ -14,13 +14,33 @@ use Application\Mapper;
 class IndexController {
 	
 	/**
+	 * Apache error Mapper
+	 * @var \Application\Mapper\ApacheError
+	 */
+	protected $_apacheErrorMapper;
+	
+	/**
+	 * Apache access Mapper
+	 * @var \Application\Mapper\ApacheAccess
+	 */
+	protected $_apacheAccessMapper;
+
+	/**
+	 * Init mappers
+	 */
+	public function __construct() {
+		$this->_apacheErrorMapper = new Mapper\ApacheError();
+		$this->_apacheAccessMapper = new Mapper\ApacheAccess();
+	}
+
+	/**
 	 * Index Action
 	 * @return array
 	 */
 	public function indexAction() {
-		$fileMapper = new Mapper\File();
 		return array(
-			'apacheErrorLogFiles' => $fileMapper->getApacheErrorLogFiles()
+			'apacheErrorLogFiles' => $this->_apacheErrorMapper->getFileList(),
+			'apacheAccessLogFiles' => $this->_apacheAccessMapper->getFileList()
 		);
 	}
 	

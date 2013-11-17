@@ -1,5 +1,15 @@
 <div class="well">
+	<h3>Apache Error Log</h3><br />
+
 	<?php foreach ($this->_view['apacheErrorLogFiles'] as $link => $file): ?>
+		<p><a href="/index/show?dir=<?= $link ?>"><?= $file ?></a></p>
+	<?php endforeach; ?>
+</div>
+
+<div class="well">
+	<h3>Apache Access Log</h3>
+	
+	<?php foreach ($this->_view['apacheAccessLogFiles'] as $link => $file): ?>
 		<p><a href="/index/show?dir=<?= $link ?>"><?= $file ?></a></p>
 	<?php endforeach; ?>
 </div>
