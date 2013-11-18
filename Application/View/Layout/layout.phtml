@@ -11,26 +11,33 @@
 		<link href="/lib/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" />
 		<link href="/lib/jquery.ui/css/ui-lightness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
 		<link href="/css/style.css" rel="stylesheet" />
-		
+
 		<script src="/lib/jquery/jquery.js"></script>
 	</head>
 
 	<body>
-
-		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="/">LogWuehler</a>
+		<div id="wrap">
+			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+				<div class="container">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="/">LogWuehler</a>
+					</div>
 				</div>
+			</div>
+
+			<div class="container">
+				<?= $this->_renderView() ?>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="container">
+				<p class="text-muted credit">
+					&COPY; 2013 Chris Herden <a target="_blank" href="http://chris-herden.de">www.chris-herden.de</a><br />
+					Lizenz: <a target="_blank" href="http://opensource.org/licenses/MIT">MIT</a>
+				</p>
 			</div>
 		</div>
 
-		<div class="container">
-
-			<?= $this->_renderView() ?>
-
-		</div>
-		
 		<script src="/lib/jquery.ui/js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="/lib/jquery.ui.datetimepicker/datetimepicker.js"></script>
 		<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
