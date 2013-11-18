@@ -52,7 +52,8 @@ class LogController {
 		return array(
 			'startTime' => date("d.m.Y H:i", time() - 600),
 			'endTime' => date("d.m.Y H:i"),
-			'file' => filter_input(INPUT_GET, 'file')
+			'fileType' => filter_input(INPUT_GET, 'file'),
+			'file' => filter_input(INPUT_GET, 'dir')
 		);
 	}
 
@@ -61,7 +62,7 @@ class LogController {
 	 * @return array
 	 */
 	public function dataAction() {
-		switch (filter_input(INPUT_GET, 'file')) {
+		switch (filter_input(INPUT_GET, 'filetype')) {
 			case 'apache.error':
 				$mapper = $this->_apacheErrorMapper;
 				break;
@@ -70,15 +71,14 @@ class LogController {
 				break;
 		}
 
+		$file = base64_decode(filter_input(INPUT_POST, 'file'));
+		$startTime = filter_input(INPUT_POST, 'time_start');
+		$endTime = filter_input(INPUT_POST, 'time_end');
+		$term = filter_input(INPUT_POST, 'term');
+		
 		echo json_encode(array(
 			'header' => $mapper->getProperties(),
-			'content' => array(
-				array(
-					'time' => '05.11.2013 12:49:23',
-					'level' => 'warn',
-					'msg' => nl2br("mod_fcgid: stderr: #0 /srv/www/xlocator.de/v2/live/webclient/library/Zend/Translate/Adapter.php(646): Zend_Translate_Adapter_Gettext->_loadTranslationData('/srv/www/xlocat...', 'de_DE', Array), referer: http://www2.xlocator.de/")
-				)
-			)
+			'content' => $mapper->getLogEntries($file, $startTime, $endTime, $term)
 		));
 
 		return array(

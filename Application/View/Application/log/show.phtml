@@ -61,10 +61,10 @@
 			var params = {
 				time_start: $('#time_start').val(),
 				time_end: $('#time_end').val(),
-				level: $('#level').val(),
-				term: $('#term').val()
+				term: $('#term').val(),
+				file: '<?= $this->_view['file'] ?>'
 			};
-			$.post('/log/data?file=<?= $this->_view['file'] ?>', params, function(data) {
+			$.post('/log/data?filetype=<?= $this->_view['fileType'] ?>', params, function(data) {
 				try {
 					data = JSON.parse(data);
 				} catch(e) {
@@ -93,6 +93,11 @@
 				var header = '<tr>';
 				var content = '';
 				
+				if(data.content.length < 1) {
+					this.showError();
+					return;
+				}
+				
 				for(var i = 0; i < data.header.length; i++) {
 					header += '<th>' + data.header[i] + '</th>';	
 				}
@@ -104,10 +109,6 @@
 						content += '<td>' + value + '</td>';
 					});
 					content += '</tr>';
-					
-//					content += '<td>' + data.content[i].level + '</td>';
-//					content += '<td>' + data.content[i].time + '</td>';
-//					content += '<td>' + data.content[i].msg + '</td>';
 					
 				}
 				console.log(content);

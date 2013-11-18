@@ -12,7 +12,7 @@ use Application\Mapper;
  * @license http://opensource.org/licenses/MIT
  */
 class ApacheAccess extends Mapper\LogFile {
-	
+
 	/**
 	 * Get keyword from ini file
 	 * @return String ini file key
@@ -35,5 +35,13 @@ class ApacheAccess extends Mapper\LogFile {
 			'Useragent'
 		);
 	}
-	
+
+	/**
+	 * Get entries of a log file in an array
+	 * @return array
+	 */
+	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
+		return array();
+	}
+
 }
