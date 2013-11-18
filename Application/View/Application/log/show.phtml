@@ -4,18 +4,18 @@
 			<tr>
 				<td>Von:</td>
 				<td>
-					<input type="text" id="time_start" class="form-control jsDate" value="<?= date("d.m.Y") ?>" />
+					<input type="text" id="time_start" class="form-control jsDate" value="<?= $this->_view['startTime'] ?>" />
 				</td>
 			</tr>
 			<tr>
 				<td>Bis:</td>
 				<td>
-					<input type="text" id="time_end" class="form-control jsDate" value="<?= date("d.m.Y") ?>" />
+					<input type="text" id="time_end" class="form-control jsDate" value="<?= $this->_view['endTime'] ?>" />
 				</td>
 			</tr>
 		</table>
 	</div>
-	<div class="col-md-5">
+	<div class="col-md-7">
 		<div class="input-group">
 			<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
 			<input type="text" id="term" class="form-control" placeholder="Suchbegriff">
@@ -31,15 +31,9 @@
 		<img src="/images/ajax-loader.gif" />
 	</div>
 	<div id="jsContentFailed" class="text-center hide">Keine Ergebnisse gefunden</div>
-	<div id="jsContentSuccess" class="hided">
+	<div id="jsContentSuccess" class="hide">
 		<table class="table jsContent">
-			<thead>
-				<tr>
-					<th>Level</th>
-					<th>Zeitpunkt</th>
-					<th>Nachricht</th>
-				</tr>
-			</thead>
+			<thead></thead>
 			<tbody></tbody>
 		</table>
 	</div>
@@ -60,26 +54,6 @@
 		};
 		$.timepicker.setDefaults($.timepicker.regional['de']);
 		$('.jsDate').datetimepicker({dateFormat: "dd.mm.yy"});
-//		$(document).ready( function() {
-//	// DateTime-Picker
-//	$(function() {
-//		$.timepicker.regional['de'] = {
-//			timeOnlyTitle: 'Uhrzeit auswählen',
-//			timeText: 'Zeit',
-//			hourText: 'Stunde',
-//			minuteText: 'Minute',
-//			secondText: 'Sekunde',
-//			currentText: 'Jetzt',
-//			closeText: 'Auswählen',
-//			ampm: false
-//		};
-//		$.timepicker.setDefaults($.timepicker.regional['de']);
-//
-//		$('.datetimepicker').datetimepicker({
-//			'dateFormat': 'dd.mm.yy'
-//		});
-//	});
-//})
 		
 		$('button').on('click', function() {
 			content.showLoadingWindow();
@@ -90,7 +64,7 @@
 				level: $('#level').val(),
 				term: $('#term').val()
 			};
-			$.post('/index/data', params, function(data) {
+			$.post('/log/data?file=<?= $this->_view['file'] ?>', params, function(data) {
 				try {
 					data = JSON.parse(data);
 				} catch(e) {
@@ -116,15 +90,28 @@
 				$('#jsLoad').removeClass('hide');
 			},
 			putContentInTable: function(data) {
+				var header = '<tr>';
 				var content = '';
-				for(var i = 0; i < data.length; i++) {
-					content += '<tr>';
-					content += '<td>' + data[i].level + '</td>';
-					content += '<td>' + data[i].time + '</td>';
-					content += '<td>' + data[i].msg + '</td>';
-					content += '</tr>';
-				}
 				
+				for(var i = 0; i < data.header.length; i++) {
+					header += '<th>' + data.header[i] + '</th>';	
+				}
+				header += '</tr>';
+				
+				for(var i = 0; i < data.content.length; i++) {
+					content += '<tr>';
+					$.each(data.content[i], function(key, value) {
+						content += '<td>' + value + '</td>';
+					});
+					content += '</tr>';
+					
+//					content += '<td>' + data.content[i].level + '</td>';
+//					content += '<td>' + data.content[i].time + '</td>';
+//					content += '<td>' + data.content[i].msg + '</td>';
+					
+				}
+				console.log(content);
+				$('table.jsContent thead').html(header);
 				$('table.jsContent tbody').html(content);
 				this.showData();
 			}

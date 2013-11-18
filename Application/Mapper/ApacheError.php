@@ -29,7 +29,6 @@ class ApacheError extends Mapper\LogFile {
 		return array(
 			'Zeitpunkt',
 			'Level',
-			'IP',
 			'Nachricht'
 		);
 	}

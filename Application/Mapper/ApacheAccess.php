@@ -31,7 +31,6 @@ class ApacheAccess extends Mapper\LogFile {
 			'Zeitpunkt',
 			'Request',
 			'HTTP Code',
-			'Größe der Antwort',
 			'Referer',
 			'Useragent'
 		);

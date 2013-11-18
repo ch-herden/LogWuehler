@@ -2,7 +2,7 @@
 	<h3>Apache Error Log</h3>
 
 	<?php foreach ($this->_view['apacheErrorLogFiles'] as $link => $file): ?>
-		<p><a href="/log/show?dir=<?= $link ?>"><?= $file ?></a></p>
+		<p><a href="/log/show?dir=<?= $link ?>&file=apache.error"><?= $file ?></a></p>
 	<?php endforeach; ?>
 </div>
 
@@ -10,6 +10,6 @@
 	<h3>Apache Access Log</h3>
 	
 	<?php foreach ($this->_view['apacheAccessLogFiles'] as $link => $file): ?>
-		<p><a href="/log/show?dir=<?= $link ?>"><?= $file ?></a></p>
+		<p><a href="/log/show?dir=<?= $link ?>&file=apache.access"><?= $file ?></a></p>
 	<?php endforeach; ?>
 </div>
