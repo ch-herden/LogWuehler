@@ -68,6 +68,13 @@ class ApacheError extends Mapper\LogFile {
 		return $entries;
 	}
 
+	/**
+	 * Validate time
+	 * @param int $time
+	 * @param String $startTime
+	 * @param String $endTime
+	 * @return boolean
+	 */
 	protected function _validateTime($time, $startTime, $endTime) {
 		$startTime = strtotime($startTime);
 		$endTime = strtotime($endTime);

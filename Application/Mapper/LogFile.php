@@ -55,7 +55,7 @@ abstract class LogFile {
 	}
 
 	/**
-	 * 
+	 * Get files from directory and filter by keyword
 	 * @param String $path
 	 * @param String $keyword
 	 * @return array
