@@ -21,4 +21,20 @@ class ApacheAccess extends Mapper\LogFile {
 		return 'apache.access';
 	}
 
+	/**
+	 * Get log properties
+	 * @return array
+	 */
+	public function getProperties() {
+		return array(
+			'IP',
+			'Zeitpunkt',
+			'Request',
+			'HTTP Code',
+			'Größe der Antwort',
+			'Referer',
+			'Useragent'
+		);
+	}
+	
 }

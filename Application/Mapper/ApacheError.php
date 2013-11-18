@@ -21,4 +21,17 @@ class ApacheError extends Mapper\LogFile {
 		return 'apache.error';
 	}
 
+	/**
+	 * Get log properties
+	 * @return array
+	 */
+	public function getProperties() {
+		return array(
+			'Zeitpunkt',
+			'Level',
+			'IP',
+			'Nachricht'
+		);
+	}
+
 }

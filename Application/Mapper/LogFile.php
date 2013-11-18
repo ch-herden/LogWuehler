@@ -31,6 +31,13 @@ abstract class LogFile {
 	abstract protected function _getKeyword();
 	
 	/**
+	 * Get log properties
+	 * @return array
+	 */
+	abstract public function getProperties();
+
+
+	/**
 	 * Get list of log files
 	 * @return array
 	 */

@@ -15,19 +15,6 @@
 			</tr>
 		</table>
 	</div>
-	<div class="col-md-2">
-		<select id="level" class="form-control">
-			<option selected="selected">Alle</option>
-			<option>[emerg]</option>
-			<option>[alert]</option>
-			<option>[crit]</option>
-			<option>[error]</option>
-			<option>[warn]</option>
-			<option>[notice]</option>
-			<option>[info]</option>
-			<option>[debug]</option>
-		</select>
-	</div>
 	<div class="col-md-5">
 		<div class="input-group">
 			<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
@@ -61,7 +48,38 @@
 <script type="text/javascript">
 
 	$(document).ready(function() {
-		$('.jsDate').datepicker({dateFormat: "dd.mm.yy"});
+		$.timepicker.regional['de'] = {
+			timeOnlyTitle: 'Uhrzeit auswählen',
+			timeText: 'Zeit',
+			hourText: 'Stunde',
+			minuteText: 'Minute',
+			secondText: 'Sekunde',
+			currentText: 'Jetzt',
+			closeText: 'Auswählen',
+			ampm: false
+		};
+		$.timepicker.setDefaults($.timepicker.regional['de']);
+		$('.jsDate').datetimepicker({dateFormat: "dd.mm.yy"});
+//		$(document).ready( function() {
+//	// DateTime-Picker
+//	$(function() {
+//		$.timepicker.regional['de'] = {
+//			timeOnlyTitle: 'Uhrzeit auswählen',
+//			timeText: 'Zeit',
+//			hourText: 'Stunde',
+//			minuteText: 'Minute',
+//			secondText: 'Sekunde',
+//			currentText: 'Jetzt',
+//			closeText: 'Auswählen',
+//			ampm: false
+//		};
+//		$.timepicker.setDefaults($.timepicker.regional['de']);
+//
+//		$('.datetimepicker').datetimepicker({
+//			'dateFormat': 'dd.mm.yy'
+//		});
+//	});
+//})
 		
 		$('button').on('click', function() {
 			content.showLoadingWindow();
