@@ -38,28 +38,31 @@ class ApacheError extends Mapper\LogFile {
 	 * @return array
 	 */
 	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
+		$result = null;
 		$entries = array();
-		
-		$date = null;
-		$level = null;
-		$message = null;
 		
 		$handle = fopen($file, "r");
 		
 		while (!feof($handle)) {
 			$line = fgets($handle);
-			preg_match('~^\[(.*?)\]~', $line, $date);
-			if (empty($date[1])) {
+			
+			$result = array();
+			if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
+				$time = strtotime(substr($result[1], 4));
+				$level = $result[2];
+				$message = $result[4];
+				
+			} else if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
+				$time = strtotime(substr($result[1], 4));
+				$level = $result[2];
+				$message = $result[3];
+			} else {
 				continue;
 			}
 			
-			$time = strtotime(substr($date[1], 4));
 			if(true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
 				continue;
 			}
-			
-			preg_match('~\] \[([a-z]*?)\] \[~', $line, $level);
-			preg_match('~\] (.*)$~', $line, $message);
 			
 			$message = $this->_validateMessage($message, $term);
 			if($message === false) {
@@ -67,8 +70,8 @@ class ApacheError extends Mapper\LogFile {
 			}
 			
 			$entries[] = array(
-				date("d.m.Y H:i:s", strtotime(substr($date[1], 4))),
-				(array_key_exists(1, $level)) ? $level[1] : '',
+				date("d.m.Y H:i:s", $time),
+				$level,
 				$message
 			);
 		}
@@ -96,12 +99,13 @@ class ApacheError extends Mapper\LogFile {
 		return false;
 	}
 	
+	/**
+	 * Validate message by term
+	 * @param String $message
+	 * @param String $term
+	 * @return boolean
+	 */
 	protected function _validateMessage($message, $term) {
-		if(!array_key_exists(1, $message)) {
-			return false;
-		}
-		$message = $message[1];
-		
 		if(strlen($term) < 1) {
 			return $message;
 		}
