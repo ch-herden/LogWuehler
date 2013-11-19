@@ -38,37 +38,39 @@ class ApacheError extends Mapper\LogFile {
 	 * @return array
 	 */
 	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
-		$result = null;
+		$time = null;
+		$result = array();
 		$entries = array();
-		
+
 		$handle = fopen($file, "r");
-		
+
 		while (!feof($handle)) {
 			$line = fgets($handle);
-			
-			$result = array();
+
+			preg_match('~^\[(.*?)\]~', $line, $time);
+			if (empty($time[1])) {
+				continue;
+			}
+			$time = strtotime(substr($time[1], 4));
+			if (true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
+				continue;
+			}
+
 			if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
-				$time = strtotime(substr($result[1], 4));
 				$level = $result[2];
 				$message = $result[4];
-				
 			} else if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
-				$time = strtotime(substr($result[1], 4));
 				$level = $result[2];
 				$message = $result[3];
 			} else {
 				continue;
 			}
-			
-			if(true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
-				continue;
-			}
-			
+
 			$message = $this->_validateMessage($message, $term);
-			if($message === false) {
+			if ($message === false) {
 				continue;
 			}
-			
+
 			$entries[] = array(
 				date("d.m.Y H:i:s", $time),
 				$level,
@@ -91,14 +93,14 @@ class ApacheError extends Mapper\LogFile {
 	protected function _validateTime($time, $startTime, $endTime) {
 		$startTime = strtotime($startTime);
 		$endTime = strtotime($endTime);
-		
-		if($time >= $startTime && $time <= $endTime) {
+
+		if ($time >= $startTime && $time <= $endTime) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Validate message by term
 	 * @param String $message
@@ -106,15 +108,15 @@ class ApacheError extends Mapper\LogFile {
 	 * @return boolean
 	 */
 	protected function _validateMessage($message, $term) {
-		if(strlen($term) < 1) {
+		if (strlen($term) < 1) {
 			return $message;
 		}
-		
-		if(strpos($message, $term) !== false) {
+
+		if (strpos($message, $term) !== false) {
 			return $message;
 		}
-		
+
 		return false;
 	}
-	
+
 }
