@@ -54,10 +54,10 @@
 		};
 		$.timepicker.setDefaults($.timepicker.regional['de']);
 		$('.jsDate').datetimepicker({dateFormat: "dd.mm.yy"});
-		
+
 		$('button').on('click', function() {
 			content.showLoadingWindow();
-			
+
 			var params = {
 				time_start: $('#time_start').val(),
 				time_end: $('#time_end').val(),
@@ -67,15 +67,15 @@
 			$.post('/log/data?filetype=<?= $this->_view['fileType'] ?>', params, function(data) {
 				try {
 					data = JSON.parse(data);
-				} catch(e) {
+				} catch (e) {
 					content.showError();
 					return;
 				}
-				
+
 				content.putContentInTable(data);
 			});
 		});
-		
+
 		var content = {
 			showError: function() {
 				$('.well.jsContent > div').addClass('hide');
@@ -92,24 +92,24 @@
 			putContentInTable: function(data) {
 				var header = '<tr>';
 				var content = '';
-				
-				if(data.content.length < 1) {
+
+				if (data.content.length < 1) {
 					this.showError();
 					return;
 				}
-				
-				for(var i = 0; i < data.header.length; i++) {
-					header += '<th>' + data.header[i] + '</th>';	
+
+				for (var i = 0; i < data.header.length; i++) {
+					header += '<th>' + data.header[i] + '</th>';
 				}
 				header += '</tr>';
-				
-				for(var i = 0; i < data.content.length; i++) {
+
+				for (var i = 0; i < data.content.length; i++) {
 					content += '<tr>';
 					$.each(data.content[i], function(key, value) {
 						content += '<td>' + value + '</td>';
 					});
 					content += '</tr>';
-					
+
 				}
 				console.log(content);
 				$('table.jsContent thead').html(header);
@@ -118,5 +118,5 @@
 			}
 		}
 	});
-	
+
 </script>
