@@ -64,16 +64,36 @@
 				term: $('#term').val(),
 				file: '<?= $this->_view['file'] ?>'
 			};
-			$.post('/log/data?filetype=<?= $this->_view['fileType'] ?>', params, function(data) {
-				try {
-					data = JSON.parse(data);
-				} catch (e) {
-					content.showError();
-					return;
-				}
+			$.ajax({
+				type: "POST",
+				url: '/log/data?filetype=<?= $this->_view['fileType'] ?>',
+				data: params,
+				success: function(data) {
+					try {
+						data = JSON.parse(data);
+					} catch (e) {
+						content.showError();
+						return;
+					}
 
-				content.putContentInTable(data);
+					content.putContentInTable(data);
+				},
+				error: function() {
+					content.showError();
+				}
 			});
+
+
+//			$.post('/log/data?filetype=<?= $this->_view['fileType'] ?>', params, function(data) {
+//				try {
+//					data = JSON.parse(data);
+//				} catch (e) {
+//					content.showError();
+//					return;
+//				}
+//
+//				content.putContentInTable(data);
+//			});
 		});
 
 		var content = {

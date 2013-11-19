@@ -48,12 +48,12 @@ class ApacheError extends Mapper\LogFile {
 		if ($fileArr[count($fileArr) - 1] === 'gz') {
 			$handle = gzopen($file, "r");
 			while (!gzeof($handle)) {
-				$line = gzgets($handle, 8192);
-			}
+				$line = gzgets($handle, 4096);
 
-			$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
-			if (is_array($result)) {
-				$entries[] = $result;
+				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
+				if (is_array($result)) {
+					$entries[] = $result;
+				}
 			}
 
 			gzclose($handle);
