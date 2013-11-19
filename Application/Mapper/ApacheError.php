@@ -41,6 +41,8 @@ class ApacheError extends Mapper\LogFile {
 		$entries = array();
 		
 		$date = null;
+		$level = null;
+		$message = null;
 		
 		$handle = fopen($file, "r");
 		
@@ -55,11 +57,19 @@ class ApacheError extends Mapper\LogFile {
 			if(true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
 				continue;
 			}
-					
+			
+			preg_match('~\] \[([a-z]*?)\] \[~', $line, $level);
+			preg_match('~\] (.*)$~', $line, $message);
+			
+			$message = $this->_validateMessage($message, $term);
+			if($message === false) {
+				continue;
+			}
+			
 			$entries[] = array(
 				date("d.m.Y H:i:s", strtotime(substr($date[1], 4))),
-				'',
-				''
+				(array_key_exists(1, $level)) ? $level[1] : '',
+				$message
 			);
 		}
 
@@ -81,6 +91,23 @@ class ApacheError extends Mapper\LogFile {
 		
 		if($time >= $startTime && $time <= $endTime) {
 			return true;
+		}
+		
+		return false;
+	}
+	
+	protected function _validateMessage($message, $term) {
+		if(!array_key_exists(1, $message)) {
+			return false;
+		}
+		$message = $message[1];
+		
+		if(strlen($term) < 1) {
+			return $message;
+		}
+		
+		if(strpos($message, $term) !== false) {
+			return $message;
 		}
 		
 		return false;
