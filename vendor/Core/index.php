@@ -45,8 +45,8 @@ class Index {
 	 * @throws Exception
 	 */
 	protected function _checkPhpVersion() {
-		if (version_compare(phpversion(), "5.3.3", "<")) {
-			throw new Exception('PHP version 5.3.3 or above is required to run this code. Please upgrade to continue.');
+		if (version_compare(phpversion(), "5.4", "<")) {
+			throw new Exception('PHP version 5.4 or above is required to run this code. Please upgrade to continue.');
 		}
 	}
 

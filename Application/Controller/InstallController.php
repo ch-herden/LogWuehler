@@ -70,7 +70,7 @@ class InstallController {
 			'phpversion' => true
 		);
 		
-		if (version_compare(phpversion(), "5.3.3", "<")) {
+		if (version_compare(phpversion(), "5.4", "<")) {
 			$perm['phpversion'] = false;
 		}
 		
