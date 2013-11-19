@@ -35,127 +35,86 @@ class ApacheError extends Mapper\LogFile {
 
 	/**
 	 * Get entries of a log file in an array
-	 * @param type $file
-	 * @param type $timeStart
-	 * @param type $timeEnd
-	 * @param type $term
-	 * @return type
+	 * @param String $file
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
+	 * @return array
 	 */
 	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
+		$entries = array();
+
 		$fileArr = explode(".", $file);
 		if ($fileArr[count($fileArr) - 1] === 'gz') {
-			return $this->_getCompressedLogEntries($file, $timeStart, $timeEnd, $term);
+			$handle = gzopen($file, "r");
+			while (!gzeof($handle)) {
+				$line = gzgets($handle, 8192);
+			}
+
+			$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
+			if (is_array($result)) {
+				$entries[] = $result;
+			}
+
+			gzclose($handle);
 		} else {
-			return $this->_getNormalLogEntries($file, $timeStart, $timeEnd, $term);
+			$handle = fopen($file, "r");
+			while (!feof($handle)) {
+				$line = fgets($handle);
+
+				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
+				if (is_array($result)) {
+					$entries[] = $result;
+				}
+			}
+
+			fclose($handle);
 		}
-	}
-
-	/**
-	 * Get entries of a log file in an array
-	 * @param type $file
-	 * @param type $timeStart
-	 * @param type $timeEnd
-	 * @param type $term
-	 * @return type
-	 */
-	protected function _getNormalLogEntries($file, $timeStart, $timeEnd, $term) {
-		$time = null;
-		$result = array();
-		$entries = array();
-
-		$handle = fopen($file, "r");
-
-		while (!feof($handle)) {
-			$line = fgets($handle);
-
-			preg_match('~^\[(.*?)\]~', $line, $time);
-			if (empty($time[1])) {
-				continue;
-			}
-			$time = strtotime(substr($time[1], 4));
-			if (true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
-				continue;
-			}
-
-			if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
-				$level = $result[2];
-				$message = $result[4];
-			} else if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
-				$level = $result[2];
-				$message = $result[3];
-			} else {
-				continue;
-			}
-
-			$message = $this->_validateMessage($message, $term);
-			if ($message === false) {
-				continue;
-			}
-
-			$entries[] = array(
-				date("d.m.Y H:i:s", $time),
-				$level,
-				$message
-			);
-		}
-
-		fclose($handle);
 
 		return $entries;
 	}
 
 	/**
-	 * Get entries of a compressed log file in an array
-	 * @param type $file
-	 * @param type $timeStart
-	 * @param type $timeEnd
-	 * @param type $term
-	 * @return type
+	 * Get an entry of a log file
+	 * @param String $line
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
+	 * @return boolean | array
 	 */
-	protected function _getCompressedLogEntries($file, $timeStart, $timeEnd, $term) {
-		$time = null;
+	protected function _getEntry($line, $timeStart, $timeEnd, $term) {
+		$timeArr = null;
 		$result = array();
-		$entries = array();
 
-		$handle = gzopen($file, "r");
-
-		while (!gzeof($handle)) {
-			$line = gzgets($handle, 4096);
-			
-			preg_match('~^\[(.*?)\]~', $line, $time);
-			if (empty($time[1])) {
-				continue;
-			}
-			$time = strtotime(substr($time[1], 4));
-			if (true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
-				continue;
-			}
-
-			if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
-				$level = $result[2];
-				$message = $result[4];
-			} else if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
-				$level = $result[2];
-				$message = $result[3];
-			} else {
-				continue;
-			}
-
-			$message = $this->_validateMessage($message, $term);
-			if ($message === false) {
-				continue;
-			}
-
-			$entries[] = array(
-				date("d.m.Y H:i:s", $time),
-				$level,
-				$message
-			);
+		preg_match('~^\[(.*?)\]~', $line, $timeArr);
+		if (empty($timeArr[1])) {
+			return false;
+		}
+		$time = strtotime(substr($timeArr[1], 4));
+		if (true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
+			return false;
 		}
 
-		gzclose($handle);
+		if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
+			$level = $result[2];
+			$message = $result[4];
+		} else if (1 === preg_match('/^\[(.*)]\ \[(.*)]\ (.*)$/', $line, $result)) {
+			$level = $result[2];
+			$message = $result[3];
+		} else {
+			return false;
+		}
 
-		return $entries;
+		$message = $this->_validateMessage($message, $term);
+		if ($message === false) {
+			return false;
+		}
+
+		return array(
+			date("d.m.Y H:i:s", $time),
+			$level,
+			$message
+		);
 	}
 
 	/**
