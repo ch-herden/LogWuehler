@@ -38,6 +38,10 @@ abstract class LogFile {
 
 	/**
 	 * Get entries of a log file in an array
+	 * @param String $file
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
 	 * @return array
 	 */
 	abstract public function getLogEntries($file, $timeStart, $timeEnd, $term);
@@ -88,4 +92,40 @@ abstract class LogFile {
 		return $files;
 	}
 
+	/**
+	 * Validate time
+	 * @param int $time
+	 * @param String $startTime
+	 * @param String $endTime
+	 * @return boolean
+	 */
+	protected function _validateTime($time, $startTime, $endTime) {
+		$startTime = strtotime($startTime);
+		$endTime = strtotime($endTime);
+
+		if ($time >= $startTime && $time <= $endTime) {
+			return true;
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Validate message by term
+	 * @param String $message
+	 * @param String $term
+	 * @return boolean
+	 */
+	protected function _validateMessage($message, $term) {
+		if (strlen($term) < 1) {
+			return $message;
+		}
+
+		if (strpos($message, $term) !== false) {
+			return $message;
+		}
+
+		return false;
+	}
+	
 }
