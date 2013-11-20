@@ -117,40 +117,4 @@ class ApacheError extends Mapper\LogFile {
 		);
 	}
 
-	/**
-	 * Validate time
-	 * @param int $time
-	 * @param String $startTime
-	 * @param String $endTime
-	 * @return boolean
-	 */
-//	protected function _validateTime($time, $startTime, $endTime) {
-//		$startTime = strtotime($startTime);
-//		$endTime = strtotime($endTime);
-//
-//		if ($time >= $startTime && $time <= $endTime) {
-//			return true;
-//		}
-//
-//		return false;
-//	}
-
-	/**
-	 * Validate message by term
-	 * @param String $message
-	 * @param String $term
-	 * @return boolean
-	 */
-//	protected function _validateMessage($message, $term) {
-//		if (strlen($term) < 1) {
-//			return $message;
-//		}
-//
-//		if (strpos($message, $term) !== false) {
-//			return $message;
-//		}
-//
-//		return false;
-//	}
-
 }
