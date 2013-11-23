@@ -83,14 +83,9 @@ class ApacheError extends Mapper\LogFile {
 	 * @return boolean | array
 	 */
 	protected function _getEntry($line, $timeStart, $timeEnd, $term) {
-		$timeArr = null;
 		$result = array();
 
-		preg_match('~^\[(.*?)\]~', $line, $timeArr);
-		if (empty($timeArr[1])) {
-			return false;
-		}
-		$time = strtotime(substr($timeArr[1], 4));
+		$time = strtotime(substr($line, 5, 20));
 		if (true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
 			return false;
 		}
