@@ -11,7 +11,7 @@
 		</div>
 	<?php endif; ?>
 	
-	<?php if(is_null(filter_input(INPUT_SERVER, 'PHP_AUTH_USER'))): ?>
+	<?php if(is_null($_SERVER['PHP_AUTH_USER'])): ?>
 	<div class="alert alert-warning">
 		Diese Seite ist nicht über HTTP Authentifizierung geschützt.
 	</div>
