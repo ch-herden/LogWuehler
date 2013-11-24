@@ -2,6 +2,8 @@
 
 namespace Application\Mapper;
 
+use Application\Model;
+
 /**
  * Abstract log file mapper
  * 
@@ -79,17 +81,36 @@ abstract class LogFile {
 				unset($dirData[0], $dirData[1]);
 				foreach ($dirData as $dirValue) {
 					if (strpos($value, $keyword) !== false || $keyword == '') {
-						$files[base64_encode($path . '/' . $value . '/' . $dirValue)] = $value . '/' . $dirValue;
+						$files[] = $this->_mapFileData($path . '/' . $value, $dirValue);
+//						$files[base64_encode($path . '/' . $value . '/' . $dirValue)] = $value . '/' . $dirValue;
 					}
 				}
 			} else {
 				if (strpos($value, $keyword) !== false || $keyword == '') {
-					$files[base64_encode($path . '/' . $value)] = $value;
+					$files[] = $this->_mapFileData($path, $value);
+//					$files[base64_encode($path . '/' . $value)] = $value;
 				}
 			}
 		}
 
 		return $files;
+	}
+
+	/**
+	 * Map data to an object
+	 * @param String $path
+	 * @param String $file
+	 * @return \Application\Model\File
+	 */
+	protected function _mapFileData($path, $file) {
+		$obj = new Model\File();
+		$obj
+				->setName($file)
+				->setPath($path . '/' . $file)
+				->setSize(filesize($path . '/' . $file))
+		;
+		
+		return $obj;
 	}
 
 	/**
@@ -109,7 +130,7 @@ abstract class LogFile {
 
 		return false;
 	}
-	
+
 	/**
 	 * Validate message by term
 	 * @param String $message
@@ -127,5 +148,5 @@ abstract class LogFile {
 
 		return false;
 	}
-	
+
 }
