@@ -15,7 +15,7 @@ class Language {
 	 * Language entries
 	 * @var array
 	 */
-	protected $_entries;
+	protected static $_entries;
 
 	/**
 	 * Get an entry by key
@@ -23,21 +23,21 @@ class Language {
 	 * @return null | String
 	 */
 	public static function translate($key) {
-		$this->_checkEntries();
+		self::_checkEntries();
 		
-		if(!array_key_exists($key, $this->_entries)) {
-			return null;
+		if(!array_key_exists($key, self::$_entries)) {
+			return $key;
 		}
 		
-		return $this->_entries[$key];
+		return self::$_entries[$key];
 	}
 	
 	/**
 	 * Check if load entries
 	 */
-	protected function _checkEntries() {
-		if(empty($this->_entries)) {
-			$this->_entries = require_once APPLICATION_PATH . '/Application/languages/de_DE.php';
+	protected static function _checkEntries() {
+		if(empty(self::$_entries)) {
+			self::$_entries = require_once APPLICATION_PATH . '/Application/languages/de_DE.php';
 		}
 	}
 	

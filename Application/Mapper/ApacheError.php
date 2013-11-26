@@ -2,6 +2,8 @@
 
 namespace Application\Mapper;
 
+use Application\Helper\Language;
+
 /**
  * Apache error log file mapper
  * 
@@ -25,9 +27,14 @@ class ApacheError extends LogFile {
 	 */
 	public function getProperties() {
 		return array(
-			'Zeitpunkt',
-			'Level',
-			'Nachricht'
+			Language::translate('cn.log.show.table.head.apache.error.time'),
+			Language::translate('cn.log.show.table.head.apache.error.level'),
+			Language::translate('cn.log.show.table.head.apache.error.message')
+
+//			,
+//			'Zeitpunkt',
+//			'Level',
+//			'Nachricht'
 		);
 	}
 

@@ -2,6 +2,8 @@
 
 namespace Application\Mapper;
 
+use Application\Helper\Language;
+
 /**
  * Apache access log file mapper
  * 
@@ -25,12 +27,12 @@ class ApacheAccess extends LogFile {
 	 */
 	public function getProperties() {
 		return array(
-			'IP',
-			'Zeitpunkt',
-			'Request',
-			'HTTP Code',
-			'Referer',
-			'Useragent'
+			Language::translate('cn.log.show.table.head.apache.access.ip'),
+			Language::translate('cn.log.show.table.head.apache.access.time'),
+			Language::translate('cn.log.show.table.head.apache.access.request'),
+			Language::translate('cn.log.show.table.head.apache.access.code'),
+			Language::translate('cn.log.show.table.head.apache.access.referer'),
+			Language::translate('cn.log.show.table.head.apache.access.useragent')
 		);
 	}
 
