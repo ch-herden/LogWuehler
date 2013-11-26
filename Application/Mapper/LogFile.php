@@ -47,7 +47,7 @@ abstract class LogFile {
 	 * @return boolean | array
 	 */
 	abstract protected function _getEntry($line, $timeStart, $timeEnd, $term);
-	
+
 	/**
 	 * Get entries of a log file in an array
 	 * @param String $file
@@ -64,6 +64,9 @@ abstract class LogFile {
 			$handle = gzopen($file, "r");
 			while (!gzeof($handle)) {
 				$line = gzgets($handle, 4096);
+				if ($line === false) {
+					continue;
+				}
 
 				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
 				if (is_array($result)) {
@@ -76,6 +79,10 @@ abstract class LogFile {
 			$handle = fopen($file, "r");
 			while (!feof($handle)) {
 				$line = fgets($handle);
+				if ($line === false) {
+					continue;
+				}
+
 
 				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
 				if (is_array($result)) {
@@ -148,7 +155,7 @@ abstract class LogFile {
 				->setPath($path . '/' . $file)
 				->setSize(filesize($path . '/' . $file))
 		;
-		
+
 		return $obj;
 	}
 
