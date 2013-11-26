@@ -39,6 +39,16 @@ abstract class LogFile {
 	abstract public function getProperties();
 
 	/**
+	 * Get an entry of a log file
+	 * @param String $line
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
+	 * @return boolean | array
+	 */
+	abstract protected function _getEntry($line, $timeStart, $timeEnd, $term);
+	
+	/**
 	 * Get entries of a log file in an array
 	 * @param String $file
 	 * @param String $timeStart
@@ -46,7 +56,38 @@ abstract class LogFile {
 	 * @param String $term
 	 * @return array
 	 */
-	abstract public function getLogEntries($file, $timeStart, $timeEnd, $term);
+	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
+		$entries = array();
+
+		$fileArr = explode(".", $file);
+		if ($fileArr[count($fileArr) - 1] === 'gz') {
+			$handle = gzopen($file, "r");
+			while (!gzeof($handle)) {
+				$line = gzgets($handle, 4096);
+
+				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
+				if (is_array($result)) {
+					$entries[] = $result;
+				}
+			}
+
+			gzclose($handle);
+		} else {
+			$handle = fopen($file, "r");
+			while (!feof($handle)) {
+				$line = fgets($handle);
+
+				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
+				if (is_array($result)) {
+					$entries[] = $result;
+				}
+			}
+
+			fclose($handle);
+		}
+
+		return $entries;
+	}
 
 	/**
 	 * Get list of log files
@@ -82,13 +123,11 @@ abstract class LogFile {
 				foreach ($dirData as $dirValue) {
 					if (strpos($value, $keyword) !== false || $keyword == '') {
 						$files[] = $this->_mapFileData($path . '/' . $value, $dirValue);
-//						$files[base64_encode($path . '/' . $value . '/' . $dirValue)] = $value . '/' . $dirValue;
 					}
 				}
 			} else {
 				if (strpos($value, $keyword) !== false || $keyword == '') {
 					$files[] = $this->_mapFileData($path, $value);
-//					$files[base64_encode($path . '/' . $value)] = $value;
 				}
 			}
 		}

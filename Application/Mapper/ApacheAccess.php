@@ -2,8 +2,6 @@
 
 namespace Application\Mapper;
 
-use Application\Mapper;
-
 /**
  * Apache access log file mapper
  * 
@@ -11,7 +9,7 @@ use Application\Mapper;
  * @copyright (c) 2013, Chris Herden
  * @license http://opensource.org/licenses/MIT
  */
-class ApacheAccess extends Mapper\LogFile {
+class ApacheAccess extends LogFile {
 
 	/**
 	 * Get keyword from ini file
@@ -34,47 +32,6 @@ class ApacheAccess extends Mapper\LogFile {
 			'Referer',
 			'Useragent'
 		);
-	}
-
-	/**
-	 * Get entries of a log file in an array
-	 * @param String $file
-	 * @param String $timeStart
-	 * @param String $timeEnd
-	 * @param String $term
-	 * @return array
-	 */
-	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
-		$entries = array();
-
-		$fileArr = explode(".", $file);
-		if ($fileArr[count($fileArr) - 1] === 'gz') {
-			$handle = gzopen($file, "r");
-			while (!gzeof($handle)) {
-				$line = gzgets($handle, 4096);
-
-				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
-				if (is_array($result)) {
-					$entries[] = $result;
-				}
-			}
-
-			gzclose($handle);
-		} else {
-			$handle = fopen($file, "r");
-			while (!feof($handle)) {
-				$line = fgets($handle);
-
-				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
-				if (is_array($result)) {
-					$entries[] = $result;
-				}
-			}
-
-			fclose($handle);
-		}
-
-		return $entries;
 	}
 
 	/**
