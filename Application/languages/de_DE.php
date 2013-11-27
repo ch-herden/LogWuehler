@@ -24,6 +24,7 @@ return array(
 	'cn.log.show.filter.search' => 'Suchbegriff',
 	'cn.log.show.filter.btn' => 'Anzeigen',
 	'cn.log.show.completed.noresult' => 'Keine Ergebnisse gefunden',
+	'cn.log.show.completed.error' => 'Es ist ein Fehler aufgetreten!',
 	'cn.install.index.title' => 'Installation',
 	'cn.install.index.warning.https' => 'LogWuehler wurde nicht über HTTPS aufgerufen.',
 	'cn.install.index.warning.httpauth' => 'Diese Seite ist nicht über HTTP Authentifizierung geschützt.',

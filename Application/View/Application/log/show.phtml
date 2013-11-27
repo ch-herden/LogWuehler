@@ -34,8 +34,11 @@
 	<div id="jsLoad" class="text-center hide">
 		<img src="/images/ajax-loader.gif" />
 	</div>
-	<div id="jsContentFailed" class="text-center hide">
+	<div id="jsContentNoResult" class="text-center hide">
 		<?= Language::translate('cn.log.show.completed.noresult') ?>
+	</div>
+	<div id="jsContentFailed" class="text-center hide">
+		<?= Language::translate('cn.log.show.completed.error') ?>
 	</div>
 	<div id="jsContentSuccess" class="hide">
 		<table class="table table-bordered jsContent" id="logTable">
@@ -86,6 +89,11 @@
 				},
 				error: function() {
 					content.showError();
+				},
+				statusCode: {
+					500: function() {
+						content.showError();
+					}
 				}
 			});
 		});
@@ -94,6 +102,10 @@
 			showError: function() {
 				$('.well.jsContent > div').addClass('hide');
 				$('#jsContentFailed').removeClass('hide');
+			},
+			showNoResult: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsContentNoResult').removeClass('hide');
 			},
 			showData: function() {
 				$('.well.jsContent > div').addClass('hide');
@@ -108,7 +120,7 @@
 				var content = '';
 
 				if (data.content.length < 1) {
-					this.showError();
+					this.showNoResult();
 					return;
 				}
 
