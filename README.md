@@ -18,6 +18,9 @@ LogWuehler is an open source software to show different types of log files in a 
 + Make the log folders readable and executable
 + Optional: Modify htaccess for http authentication
 
+### Supported languages
++ German
+
 ### Feedback
 Any feedback, suggestions, criticism, doesn't matter if good or not?
 Add an issue or send me an email (contact@chris-herden.de) to improve the software!
