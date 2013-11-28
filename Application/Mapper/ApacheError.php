@@ -30,11 +30,6 @@ class ApacheError extends LogFile {
 			Language::translate('cn.log.show.table.head.apache.error.time'),
 			Language::translate('cn.log.show.table.head.apache.error.level'),
 			Language::translate('cn.log.show.table.head.apache.error.message')
-
-//			,
-//			'Zeitpunkt',
-//			'Level',
-//			'Nachricht'
 		);
 	}
 

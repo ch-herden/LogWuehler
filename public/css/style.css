@@ -5,14 +5,11 @@ html, body { height: 100%; }
 .container .credit { margin: 20px 0; }
 #footer > .container { padding-left: 15px; padding-right: 15px; }
 
-/* css for timepicker */
 .ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
 .ui-timepicker-div dl{ text-align: left; }
 .ui-timepicker-div dl dt{ height: 25px; }
 .ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
 
-#logTable td {
-    word-break: break-all;
-    word-wrap: break-word;
-}
+#logTable td { word-break: break-all; word-wrap: break-word; }
+#logTable tr td:first-child, #logTable tr td:nth-child(2) { word-break: normal; }
