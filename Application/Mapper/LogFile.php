@@ -98,10 +98,14 @@ abstract class LogFile {
 
 	/**
 	 * Get list of log files
-	 * @return array
+	 * @return array | null
 	 */
 	public function getFileList() {
 		$config = parse_ini_file(APPLICATION_PATH . '/Application/config/app.ini', true);
+		if(!array_key_exists($this->_iniKey, $config)) {
+			return null;
+		}
+		
 		$path = $config[$this->_iniKey]['path'];
 		$keyword = $config[$this->_iniKey]['keyword'];
 

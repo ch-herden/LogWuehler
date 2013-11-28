@@ -1,5 +1,6 @@
 <?php use Application\Helper\Language; ?>
 
+<?php if($this->_view['apacheErrorLogFiles'] !== null): ?>
 <div class="well">
 	<h3><?= Language::translate('cn.log.index.apache.error') ?></h3>
 
@@ -16,7 +17,9 @@
 		<?php endforeach; ?>
 	</table>
 </div>
+<?php endif; ?>
 
+<?php if($this->_view['apacheAccessLogFiles'] !== null): ?>
 <div class="well">
 	<h3><?= Language::translate('cn.log.index.apache.access') ?></h3>
 
@@ -33,3 +36,4 @@
 		<?php endforeach; ?>
 	</table>
 </div>
+<?php endif; ?>
