@@ -1,7 +1,7 @@
 LogWuehler
 ==========
 
-LogWuehler is an open source software to show different types of log files.
+LogWuehler is an open source software to show different types of log files in a web browser.
 
 ### Supported log files
 +   Apache Error Log
