@@ -88,8 +88,7 @@ class ConfigFile {
 	 * @param String $dir
 	 */
 	protected function _checkDirectoryPermissions($dir) {
-		$content = @scandir($dir);
-		if (!is_array($content) || !is_readable($dir)) {
+		if(is_readable($dir) !== true || is_executable($dir) !== true) {
 			return false;
 		}
 
