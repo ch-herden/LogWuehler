@@ -2,58 +2,61 @@
 
  use Application\Helper\Language; ?>
 
-<?php if ($this->_view['apacheErrorLogFiles'] !== null): ?>
-	<div class="well">
-		<h3 class="logOverviewTitle" data-id="apacheError">
-			<?= Language::translate('cn.log.index.apache.error') ?>
-		</h3>
+<ul class="nav nav-tabs">
+	<?php if ($this->_view['apacheErrorLogFiles'] !== null): ?>
+		<li>
+			<a href="#apacheErrorTab" data-toggle="tab">
+				<?= Language::translate('cn.log.index.apache.error') ?>
+			</a>
+		</li>
+	<?php endif; ?>
+	<?php if ($this->_view['apacheAccessLogFiles'] !== null): ?>
+		<li>
+			<a href="#apacheAccessTab" data-toggle="tab">
+				<?= Language::translate('cn.log.index.apache.access') ?>
+			</a>
+		</li>
+	<?php endif; ?>
+</ul>
 
-		<table class="table hide" id="apacheError">
-			<?php foreach ($this->_view['apacheErrorLogFiles'] as $file): ?>
-				<tr>
-					<td>
-						<p><a href="/log/show?dir=<?= base64_encode($file->getPath()) ?>&file=apache.error"><?= $file->getName() ?></a></p>
-					</td>
-					<td class="text-right">
-						<?= \Application\Helper\File::formatFilesize($file->getSize()) ?>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-		</table>
-	</div>
-<?php endif; ?>
-
-<?php if ($this->_view['apacheAccessLogFiles'] !== null): ?>
-	<div class="well">
-		<h3 data-id="apacheAccess">
-			<?= Language::translate('cn.log.index.apache.access') ?>
-		</h3>
-
-		<table class="table hide" id="apacheAccess">
-			<?php foreach ($this->_view['apacheAccessLogFiles'] as $file): ?>
-				<tr>
-					<td>
-						<p><a href="/log/show?dir=<?= base64_encode($file->getPath()) ?>&file=apache.access"><?= $file->getName() ?></a></p>
-					</td>
-					<td class="text-right">
-						<?= \Application\Helper\File::formatFilesize($file->getSize()) ?>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-		</table>
-	</div>
-<?php endif; ?>
+<div class="tab-content">
+	<?php if ($this->_view['apacheErrorLogFiles'] !== null): ?>
+		<div class="tab-pane" id="apacheErrorTab">
+			<table class="table logOverview" id="apacheError">
+				<?php foreach ($this->_view['apacheErrorLogFiles'] as $file): ?>
+					<tr>
+						<td>
+							<p><a href="/log/show?dir=<?= base64_encode($file->getPath()) ?>&file=apache.error"><?= $file->getName() ?></a></p>
+						</td>
+						<td class="text-right">
+							<?= \Application\Helper\File::formatFilesize($file->getSize()) ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	<?php endif; ?>
+	<?php if ($this->_view['apacheAccessLogFiles'] !== null): ?>
+		<div class="tab-pane" id="apacheAccessTab">
+			<table class="table logOverview" id="apacheAccess">
+				<?php foreach ($this->_view['apacheAccessLogFiles'] as $file): ?>
+					<tr>
+						<td>
+							<p><a href="/log/show?dir=<?= base64_encode($file->getPath()) ?>&file=apache.access"><?= $file->getName() ?></a></p>
+						</td>
+						<td class="text-right">
+							<?= \Application\Helper\File::formatFilesize($file->getSize()) ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	<?php endif; ?>
+</div>
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('h3.logOverviewTitle').on('click', function() {
-			console.log('click');
-			var element = $('#' + $(this).data('id'));
-			if (element.hasClass('hide')) {
-				element.removeClass('hide', 1000);
-			} else {
-				element.addClass('hide', 1000);
-			}
-		});
+		$('.nav-tabs a:first').tab('show');
 	});
+
 </script>
