@@ -1,0 +1,62 @@
+<?php
+
+ use Application\Helper\Language; ?>
+
+<ul class="nav nav-tabs">
+	<?php if ($this->_view['apacheErrorLogFiles'] !== null): ?>
+		<li>
+			<a href="#apacheErrorTab" data-toggle="tab">
+				<?= Language::translate('cn.log.index.apache.error') ?>
+			</a>
+		</li>
+	<?php endif; ?>
+	<?php if ($this->_view['apacheAccessLogFiles'] !== null): ?>
+		<li>
+			<a href="#apacheAccessTab" data-toggle="tab">
+				<?= Language::translate('cn.log.index.apache.access') ?>
+			</a>
+		</li>
+	<?php endif; ?>
+</ul>
+
+<div class="tab-content">
+	<?php if ($this->_view['apacheErrorLogFiles'] !== null): ?>
+		<div class="tab-pane" id="apacheErrorTab">
+			<table class="table logOverview" id="apacheError">
+				<?php foreach ($this->_view['apacheErrorLogFiles'] as $file): ?>
+					<tr>
+						<td>
+							<p><a href="/log/show?dir=<?= base64_encode($file->getPath()) ?>&file=apache.error"><?= $file->getName() ?></a></p>
+						</td>
+						<td class="text-right">
+							<?= \Application\Helper\File::formatFilesize($file->getSize()) ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	<?php endif; ?>
+	<?php if ($this->_view['apacheAccessLogFiles'] !== null): ?>
+		<div class="tab-pane" id="apacheAccessTab">
+			<table class="table logOverview" id="apacheAccess">
+				<?php foreach ($this->_view['apacheAccessLogFiles'] as $file): ?>
+					<tr>
+						<td>
+							<p><a href="/log/show?dir=<?= base64_encode($file->getPath()) ?>&file=apache.access"><?= $file->getName() ?></a></p>
+						</td>
+						<td class="text-right">
+							<?= \Application\Helper\File::formatFilesize($file->getSize()) ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	<?php endif; ?>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.nav-tabs a:first').tab('show');
+	});
+
+</script>

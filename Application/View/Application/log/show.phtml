@@ -1,0 +1,152 @@
+<?php use Application\Helper\Language; ?>
+
+<div class="well row">
+	<?= base64_decode($this->_view['file']) ?>
+</div>
+
+<div class="well row">
+	<div class="col-md-3">
+		<table>
+			<tr>
+				<td><?= Language::translate('cn.log.show.filter.date.from') ?></td>
+				<td>
+					<input type="text" id="time_start" class="form-control jsDate" value="<?= $this->_view['startTime'] ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td><?= Language::translate('cn.log.show.filter.date.to') ?></td>
+				<td>
+					<input type="text" id="time_end" class="form-control jsDate" value="<?= $this->_view['endTime'] ?>" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="col-md-7">
+		<div class="input-group">
+			<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+			<input type="text" id="term" class="form-control" placeholder="<?= Language::translate('cn.log.show.filter.search') ?>">
+		</div>
+	</div>
+	<div class="col-md-2">
+		<button type="button" class="btn btn-primary btn-block">
+			<?= Language::translate('cn.log.show.filter.btn') ?>
+		</button>
+	</div>
+</div>
+
+<div class="well row jsContent">
+	<div id="jsLoad" class="text-center hide">
+		<img src="/images/ajax-loader.gif" />
+	</div>
+	<div id="jsContentNoResult" class="text-center hide">
+		<?= Language::translate('cn.log.show.completed.noresult') ?>
+	</div>
+	<div id="jsContentFailed" class="text-center hide">
+		<?= Language::translate('cn.log.show.completed.error') ?>
+	</div>
+	<div id="jsContentSuccess" class="hide">
+		<table class="table table-bordered jsContent" id="logTable">
+			<thead></thead>
+			<tbody></tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		$.timepicker.regional['de'] = {
+			timeOnlyTitle: 'Uhrzeit auswählen',
+			timeText: 'Zeit',
+			hourText: 'Stunde',
+			minuteText: 'Minute',
+			secondText: 'Sekunde',
+			currentText: 'Jetzt',
+			closeText: 'Auswählen',
+			ampm: false
+		};
+		$.timepicker.setDefaults($.timepicker.regional['de']);
+		$('.jsDate').datetimepicker({dateFormat: "dd.mm.yy"});
+
+		$('button').on('click', function() {
+			content.showLoadingWindow();
+
+			var params = {
+				time_start: $('#time_start').val(),
+				time_end: $('#time_end').val(),
+				term: $('#term').val(),
+				file: '<?= $this->_view['file'] ?>'
+			};
+			$.ajax({
+				type: "POST",
+				url: '/log/data?filetype=<?= $this->_view['fileType'] ?>',
+				data: params,
+				success: function(data) {
+					try {
+						data = JSON.parse(data);
+					} catch (e) {
+						content.showError();
+						return;
+					}
+
+					content.putContentInTable(data);
+				},
+				error: function() {
+					content.showError();
+				},
+				statusCode: {
+					500: function() {
+						content.showError();
+					}
+				}
+			});
+		});
+
+		var content = {
+			showError: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsContentFailed').removeClass('hide');
+			},
+			showNoResult: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsContentNoResult').removeClass('hide');
+			},
+			showData: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsContentSuccess').removeClass('hide');
+			},
+			showLoadingWindow: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsLoad').removeClass('hide');
+			},
+			putContentInTable: function(data) {
+				var header = '<tr>';
+				var content = '';
+
+				if (data.content.length < 1) {
+					this.showNoResult();
+					return;
+				}
+
+				for (var i = 0; i < data.header.length; i++) {
+					header += '<th>' + data.header[i] + '</th>';
+				}
+				header += '</tr>';
+
+				var lastIndex = data.content.length - 1;
+				for (var i = lastIndex; i >= 0; i--) {
+					content += '<tr>';
+					$.each(data.content[i], function(key, value) {
+						content += '<td>' + value + '</td>';
+					});
+					content += '</tr>';
+				}
+
+				$('table.jsContent thead').html(header);
+				$('table.jsContent tbody').html(content);
+				this.showData();
+			}
+		}
+	});
+
+</script>
