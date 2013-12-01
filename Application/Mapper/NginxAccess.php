@@ -11,14 +11,30 @@ namespace Application\Mapper;
  */
 class NginxAccess extends LogFile {
 	
+	/**
+	 * Get log properties
+	 * @return array
+	 */
 	public function getProperties() {
 		
 	}
 	
+	/**
+	 * Get keyword from ini file
+	 * @return String ini file key
+	 */
 	protected function _getKeyword() {
 		
 	}
 	
+	/**
+	 * Get an entry of a log file
+	 * @param String $line
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
+	 * @return boolean | array
+	 */
 	protected function _getEntry($line, $timeStart, $timeEnd, $term) {
 		
 	}
