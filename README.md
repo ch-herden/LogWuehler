@@ -6,6 +6,7 @@ LogWuehler is an open source software to show different types of log files in a 
 ### Supported log files
 +   Apache Error Log
 +   Apache Access Log
++   Nginx Access Log
 
 ### System requirements
 +   PHP 5.4 or later
