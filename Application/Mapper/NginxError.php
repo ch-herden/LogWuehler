@@ -2,6 +2,8 @@
 
 namespace Application\Mapper;
 
+use Application\Helper\Language;
+
 /**
  * Nginx error log file mapper
  * 
@@ -16,7 +18,11 @@ class NginxError extends LogFile {
 	 * @return array
 	 */
 	public function getProperties() {
-		
+		return array(
+			Language::translate('cn.log.show.table.head.nginx.error.time'),
+			Language::translate('cn.log.show.table.head.nginx.error.level'),
+			Language::translate('cn.log.show.table.head.nginx.error.message')
+		);
 	}
 	
 	/**
@@ -36,7 +42,16 @@ class NginxError extends LogFile {
 	 * @return boolean | array
 	 */
 	protected function _getEntry($line, $timeStart, $timeEnd, $term) {
+		$result = array();
+
+		$time = strtotime(substr($line, 0, 19));
+		if (true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
+			return false;
+		}
 		
+//		die(var_dump($time, substr($line, 0, 19), $line));
+		
+		return $result;
 	}
 
 }
