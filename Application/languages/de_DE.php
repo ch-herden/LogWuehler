@@ -43,5 +43,11 @@ return array(
 	'cn.install.index.file.apache.access.title' => 'Apache Access Log',
 	'cn.install.index.file.apache.access.dir' => 'Pfad',
 	'cn.install.index.file.apache.access.keyword' => 'Schlüsselwort',
+	'cn.install.index.file.nginx.error.title' => 'Nginx Error Log',
+	'cn.install.index.file.nginx.error.dir' => 'Pfad',
+	'cn.install.index.file.nginx.error.keyword' => 'Schlüsselwort',
+	'cn.install.index.file.nginx.access.title' => 'Nginx Access Log',
+	'cn.install.index.file.nginx.access.dir' => 'Pfad',
+	'cn.install.index.file.nginx.access.keyword' => 'Schlüsselwort',
 	'cn.install.index.btn.install' => 'Installieren'
 );

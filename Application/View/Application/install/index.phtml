@@ -1,4 +1,6 @@
-<?php use Application\Helper\Language; ?>
+<?php
+
+ use Application\Helper\Language; ?>
 
 <h2><?= Language::translate('cn.install.index.title') ?></h2>
 
@@ -6,17 +8,17 @@
 
 	<?php
 	$https = filter_input(INPUT_SERVER, 'HTTPS');
-	if (empty($https)): 
-	?>
+	if (empty($https)):
+		?>
 		<div class="alert alert-warning">
 			<?= Language::translate('cn.install.index.warning.https') ?>
 		</div>
 	<?php endif; ?>
-	
-	<?php if(is_null($_SERVER['PHP_AUTH_USER'])): ?>
-	<div class="alert alert-warning">
-		<?= Language::translate('cn.install.index.warning.httpauth') ?>
-	</div>
+
+	<?php if (is_null($_SERVER['PHP_AUTH_USER'])): ?>
+		<div class="alert alert-warning">
+			<?= Language::translate('cn.install.index.warning.httpauth') ?>
+		</div>
 	<?php endif; ?>
 
 	<div class="well">
@@ -96,5 +98,52 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="col-md-6">
+			<div class="well">
+				<?php if ($this->_view['error']['nginxError'] == true): ?>
+					<div class="alert alert-danger">
+						<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
+						<?= Language::translate('cn.install.index.file.message.error.body') ?>
+					</div>
+				<?php endif; ?>
+
+				<h3><?= Language::translate('cn.install.index.file.nginx.error.title') ?></h3>
+
+				<div class="form-group">
+					<label><?= Language::translate('cn.install.index.file.nginx.error.dir') ?></label>
+					<input type="text" name="nginxErrorPath" value="/var/log/nginx" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label><?= Language::translate('cn.install.index.file.nginx.error.keyword') ?></label>
+					<input type="text" name="nginxErrorKeyword" value="error" class="form-control" />
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="well">
+				<?php if ($this->_view['error']['nginxAccess'] == true): ?>
+					<div class="alert alert-danger">
+						<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
+						<?= Language::translate('cn.install.index.file.message.error.body.') ?>
+					</div>
+				<?php endif; ?>
+
+				<h3><?= Language::translate('cn.install.index.file.nginx.access.title') ?></h3>
+
+				<div class="form-group">
+					<label><?= Language::translate('cn.install.index.file.nginx.access.dir') ?></label>
+					<input type="text" name="nginxAccessPath" value="/var/log/nginx" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label><?= Language::translate('cn.install.index.file.nginx.access.keyword') ?></label>
+					<input type="text" name="nginxAccessKeyword" value="access" class="form-control" />
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<input type="submit" class="btn btn-primary btn-lg" value="<?= Language::translate('cn.install.index.btn.install') ?>" <?= (array_search(false, $this->_view['permission']) !== false) ? 'disabled="disabled"' : '' ?> />
+	<br /><br />
 </form>
