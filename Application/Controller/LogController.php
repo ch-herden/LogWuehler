@@ -86,6 +86,12 @@ class LogController {
 			case 'apache.access':
 				$mapper = $this->_apacheAccessMapper;
 				break;
+			case 'nginx.error':
+				$mapper = $this->_nginxErrorMapper;
+				break;
+			case 'nginx.access':
+				$mapper = $this->_nginxAccessMapper;
+				break;
 		}
 
 		$file = base64_decode(filter_input(INPUT_POST, 'file'));
