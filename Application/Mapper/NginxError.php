@@ -24,7 +24,7 @@ class NginxError extends LogFile {
 	 * @return String ini file key
 	 */
 	protected function _getKeyword() {
-		
+		return 'nginx.error';
 	}
 	
 	/**
