@@ -10,6 +10,8 @@
 return array(
 	'cn.log.index.apache.error' => 'Apache Error Log',
 	'cn.log.index.apache.access' => 'Apache Access Log',
+	'cn.log.index.nginx.error' => 'Nginx Error Log',
+	'cn.log.index.nginx.access' => 'Nginx Access Log',
 	'cn.log.show.table.head.apache.error.time' => 'Zeitpunkt',
 	'cn.log.show.table.head.apache.error.level' => 'Level',
 	'cn.log.show.table.head.apache.error.message' => 'Nachricht',

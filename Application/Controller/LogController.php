@@ -14,16 +14,29 @@ use Application\Mapper;
 class LogController {
 
 	/**
-	 * Apache error Mapper
+	 * Apache error mapper
 	 * @var \Application\Mapper\ApacheError
 	 */
 	protected $_apacheErrorMapper;
 
 	/**
-	 * Apache access Mapper
+	 * Apache access mapper
 	 * @var \Application\Mapper\ApacheAccess
 	 */
 	protected $_apacheAccessMapper;
+
+	/**
+	 * Nginx error mapper
+	 * @var \Application\Mapper\NginxError
+	 */
+	protected $_nginxErrorMapper;
+	
+	/**
+	 * Nginx access mapper
+	 * @var \Application\Mapper\NginxAccess
+	 */
+	protected $_nginxAccessMapper;
+
 
 	/**
 	 * Init mappers
@@ -31,6 +44,8 @@ class LogController {
 	public function __construct() {
 		$this->_apacheErrorMapper = new Mapper\ApacheError();
 		$this->_apacheAccessMapper = new Mapper\ApacheAccess();
+		$this->_nginxErrorMapper = new Mapper\NginxError();
+		$this->_nginxAccessMapper = new Mapper\NginxAccess();
 	}
 
 	/**
@@ -40,7 +55,9 @@ class LogController {
 	public function indexAction() {
 		return array(
 			'apacheErrorLogFiles' => $this->_apacheErrorMapper->getFileList(),
-			'apacheAccessLogFiles' => $this->_apacheAccessMapper->getFileList()
+			'apacheAccessLogFiles' => $this->_apacheAccessMapper->getFileList(),
+			'nginxErrorLogFiles' => $this->_nginxErrorMapper->getFileList(),
+			'nginxAccessLogFiles' => $this->_nginxAccessMapper->getFileList()
 		);
 	}
 
