@@ -24,7 +24,9 @@ class InstallController {
 			'error' => array(
 				'file' => false,
 				'apacheError' => false,
-				'apacheAccess' => false
+				'apacheAccess' => false,
+				'nginxError' => false,
+				'nginxAccess' => false
 			),
 			'success' => false
 		);

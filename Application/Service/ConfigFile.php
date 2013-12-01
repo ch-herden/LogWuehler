@@ -38,7 +38,9 @@ class ConfigFile {
 		$this->_error = array(
 			'file' => false,
 			'apacheError' => false,
-			'apacheAccess' => false
+			'apacheAccess' => false,
+			'nginxError' => false,
+			'nginxAccess' => false
 		);
 		$this->_file = array();
 	}
@@ -66,6 +68,24 @@ class ConfigFile {
 			$this->_buildConfigString('apache.access', $apacheAccessLogPath, $this->_params['apacheAccessKeyword']);
 		}
 
+		if (strlen($this->_params['nginxErrorPath']) > 0) {
+			$apacheErrorLogPath = realpath($this->_params['nginxErrorPath']);
+			if (!$this->_checkDirectoryPermissions($apacheErrorLogPath)) {
+				$this->_error['nginxError'] = true;
+				return $this->_error;
+			}
+			$this->_buildConfigString('nginx.error', $apacheErrorLogPath, $this->_params['nginxErrorKeyword']);
+		}
+		
+		if (strlen($this->_params['nginxAccessPath']) > 0) {
+			$apacheAccessLogPath = realpath($this->_params['nginxAccessPath']);
+			if (!$this->_checkDirectoryPermissions($apacheAccessLogPath)) {
+				$this->_error['nginxAccess'] = true;
+				return $this->_error;
+			}
+			$this->_buildConfigString('nginx.access', $apacheAccessLogPath, $this->_params['nginxAccessKeyword']);
+		}
+		
 		$this->_write();
 		return true;
 	}
