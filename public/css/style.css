@@ -17,16 +17,7 @@ html, body { height: 100%; }
 
 .logOverview { margin-top:50px; }
 
-#installForms {
-    width: 1160px;
-}
-.installContainer {
-    float:left;
-    display: none;
-    margin-right: 20px;
-    width:270px;
-}
+#installForms { width: 1160px; }
+.installContainer { float:left; display: none; margin-right: 20px; width:270px; }
 
-.clear {
-    clear: both;
-}
+.clear { clear: both; }
