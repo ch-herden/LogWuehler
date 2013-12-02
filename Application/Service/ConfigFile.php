@@ -50,7 +50,7 @@ class ConfigFile {
 	 * @return boolean | array
 	 */
 	public function perform() {
-		if (strlen($this->_params['apacheErrorPath']) > 0) {
+		if (strlen($this->_params['apacheErrorPath']) > 0 && array_key_exists('chApacheError', $this->_params)) {
 			$apacheErrorLogPath = realpath($this->_params['apacheErrorPath']);
 			if (!$this->_checkDirectoryPermissions($apacheErrorLogPath)) {
 				$this->_error['apacheError'] = true;
@@ -59,7 +59,7 @@ class ConfigFile {
 			$this->_buildConfigString('apache.error', $apacheErrorLogPath, $this->_params['apacheErrorKeyword']);
 		}
 
-		if (strlen($this->_params['apacheAccessPath']) > 0) {
+		if (strlen($this->_params['apacheAccessPath']) > 0 && array_key_exists('chApacheAccess', $this->_params)) {
 			$apacheAccessLogPath = realpath($this->_params['apacheAccessPath']);
 			if (!$this->_checkDirectoryPermissions($apacheAccessLogPath)) {
 				$this->_error['apacheAccess'] = true;
@@ -68,7 +68,7 @@ class ConfigFile {
 			$this->_buildConfigString('apache.access', $apacheAccessLogPath, $this->_params['apacheAccessKeyword']);
 		}
 
-		if (strlen($this->_params['nginxErrorPath']) > 0) {
+		if (strlen($this->_params['nginxErrorPath']) > 0 && array_key_exists('chNginxError', $this->_params)) {
 			$apacheErrorLogPath = realpath($this->_params['nginxErrorPath']);
 			if (!$this->_checkDirectoryPermissions($apacheErrorLogPath)) {
 				$this->_error['nginxError'] = true;
@@ -77,7 +77,7 @@ class ConfigFile {
 			$this->_buildConfigString('nginx.error', $apacheErrorLogPath, $this->_params['nginxErrorKeyword']);
 		}
 		
-		if (strlen($this->_params['nginxAccessPath']) > 0) {
+		if (strlen($this->_params['nginxAccessPath']) > 0 && array_key_exists('chNginxAccess', $this->_params)) {
 			$apacheAccessLogPath = realpath($this->_params['nginxAccessPath']);
 			if (!$this->_checkDirectoryPermissions($apacheAccessLogPath)) {
 				$this->_error['nginxAccess'] = true;

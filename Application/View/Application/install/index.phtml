@@ -22,21 +22,43 @@
 	<?php endif; ?>
 
 	<div class="well">
-		<h3><?= Language::translate('cn.install.index.requirements.title') ?></h3>
+		<div class="row">
+			<div class="col-md-6">
+				<h3><?= Language::translate('cn.install.index.requirements.title') ?></h3>
 
-		<?= Language::translate('cn.install.index.requirements.writeable') ?>
-		<?php if ($this->_view['permission']['config'] == true): ?>
-			<span class="label label-success">TRUE</span>
-		<?php else: ?>
-			<span class="label label-danger">FALSE</span>
-		<?php endif; ?>
-		<br />
-		<?= Language::translate('cn.install.index.requirements.phpversion') ?>
-		<?php if ($this->_view['permission']['phpversion'] == true): ?>
-			<span class="label label-success">TRUE</span>
-		<?php else: ?>
-			<span class="label label-danger">FALSE</span>
-		<?php endif; ?>
+				<?= Language::translate('cn.install.index.requirements.writeable') ?>
+				<?php if ($this->_view['permission']['config'] == true): ?>
+					<span class="label label-success">TRUE</span>
+				<?php else: ?>
+					<span class="label label-danger">FALSE</span>
+				<?php endif; ?>
+				<br />
+				<?= Language::translate('cn.install.index.requirements.phpversion') ?>
+				<?php if ($this->_view['permission']['phpversion'] == true): ?>
+					<span class="label label-success">TRUE</span>
+				<?php else: ?>
+					<span class="label label-danger">FALSE</span>
+				<?php endif; ?>
+			</div>
+			<div class="col-md-6">
+				<label>
+					<input type="checkbox" name="chApacheError" data-id="boxApacheError" />
+					Apache Error Log
+				</label><br />
+				<label>
+					<input type="checkbox" name="chApacheAccess" data-id="boxApacheAccess" />
+					Apache Access Log
+				</label><br />
+				<label>
+					<input type="checkbox" name="chNginxError" data-id="boxNginxError" />
+					Nginx Error Log
+				</label><br />
+				<label>
+					<input type="checkbox" name="chNginxAccess" data-id="boxNginxAccess" />
+					Nginx Access Log
+				</label>
+			</div>
+		</div>
 	</div>
 
 	<?php if ($this->_view['success'] === true): ?>
@@ -52,98 +74,113 @@
 		</div>
 	<?php endif; ?>
 
-	<div class="row">
-		<div class="col-md-6">
-			<div class="well">
-				<?php if ($this->_view['error']['apacheError'] == true): ?>
-					<div class="alert alert-danger">
-						<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
-						<?= Language::translate('cn.install.index.file.message.error.body') ?>
-					</div>
-				<?php endif; ?>
-
-				<h3><?= Language::translate('cn.install.index.file.apache.error.title') ?></h3>
-
-				<div class="form-group">
-					<label><?= Language::translate('cn.install.index.file.apache.error.dir') ?></label>
-					<input type="text" name="apacheErrorPath" value="/var/log/apache2" class="form-control" />
+	<div id="installForms">
+		<div class="well installContainer" id="boxApacheError">
+			<?php if ($this->_view['error']['apacheError'] == true): ?>
+				<div class="alert alert-danger">
+					<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
+					<?= Language::translate('cn.install.index.file.message.error.body') ?>
 				</div>
-				<div class="form-group">
-					<label><?= Language::translate('cn.install.index.file.apache.error.keyword') ?></label>
-					<input type="text" name="apacheErrorKeyword" value="error" class="form-control" />
-				</div>
+			<?php endif; ?>
+
+			<h4><?= Language::translate('cn.install.index.file.apache.error.title') ?></h4>
+
+			<div class="form-group">
+				<label><?= Language::translate('cn.install.index.file.apache.error.dir') ?></label>
+				<input type="text" name="apacheErrorPath" value="/var/log/apache2" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label><?= Language::translate('cn.install.index.file.apache.error.keyword') ?></label>
+				<input type="text" name="apacheErrorKeyword" value="error" class="form-control" />
 			</div>
 		</div>
 
-		<div class="col-md-6">
-			<div class="well">
-				<?php if ($this->_view['error']['apacheAccess'] == true): ?>
-					<div class="alert alert-danger">
-						<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
-						<?= Language::translate('cn.install.index.file.message.error.body.') ?>
-					</div>
-				<?php endif; ?>
-
-				<h3><?= Language::translate('cn.install.index.file.apache.access.title') ?></h3>
-
-				<div class="form-group">
-					<label><?= Language::translate('cn.install.index.file.apache.access.dir') ?></label>
-					<input type="text" name="apacheAccessPath" value="/var/log/apache2" class="form-control" />
+		<div class="well installContainer" id="boxApacheAccess">
+			<?php if ($this->_view['error']['apacheAccess'] == true): ?>
+				<div class="alert alert-danger">
+					<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
+					<?= Language::translate('cn.install.index.file.message.error.body.') ?>
 				</div>
-				<div class="form-group">
-					<label><?= Language::translate('cn.install.index.file.apache.access.keyword') ?></label>
-					<input type="text" name="apacheAccessKeyword" value="access" class="form-control" />
-				</div>
+			<?php endif; ?>
+
+			<h4><?= Language::translate('cn.install.index.file.apache.access.title') ?></h4>
+
+			<div class="form-group">
+				<label><?= Language::translate('cn.install.index.file.apache.access.dir') ?></label>
+				<input type="text" name="apacheAccessPath" value="/var/log/apache2" class="form-control" />
 			</div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-6">
-			<div class="well">
-				<?php if ($this->_view['error']['nginxError'] == true): ?>
-					<div class="alert alert-danger">
-						<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
-						<?= Language::translate('cn.install.index.file.message.error.body') ?>
-					</div>
-				<?php endif; ?>
-
-				<h3><?= Language::translate('cn.install.index.file.nginx.error.title') ?></h3>
-
-				<div class="form-group">
-					<label><?= Language::translate('cn.install.index.file.nginx.error.dir') ?></label>
-					<input type="text" name="nginxErrorPath" value="/var/log/nginx" class="form-control" />
-				</div>
-				<div class="form-group">
-					<label><?= Language::translate('cn.install.index.file.nginx.error.keyword') ?></label>
-					<input type="text" name="nginxErrorKeyword" value="error" class="form-control" />
-				</div>
+			<div class="form-group">
+				<label><?= Language::translate('cn.install.index.file.apache.access.keyword') ?></label>
+				<input type="text" name="apacheAccessKeyword" value="access" class="form-control" />
 			</div>
 		</div>
 
-		<div class="col-md-6">
-			<div class="well">
-				<?php if ($this->_view['error']['nginxAccess'] == true): ?>
-					<div class="alert alert-danger">
-						<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
-						<?= Language::translate('cn.install.index.file.message.error.body.') ?>
-					</div>
-				<?php endif; ?>
-
-				<h3><?= Language::translate('cn.install.index.file.nginx.access.title') ?></h3>
-
-				<div class="form-group">
-					<label><?= Language::translate('cn.install.index.file.nginx.access.dir') ?></label>
-					<input type="text" name="nginxAccessPath" value="/var/log/nginx" class="form-control" />
+		<div class="well installContainer" id="boxNginxError">
+			<?php if ($this->_view['error']['nginxError'] == true): ?>
+				<div class="alert alert-danger">
+					<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
+					<?= Language::translate('cn.install.index.file.message.error.body') ?>
 				</div>
-				<div class="form-group">
-					<label><?= Language::translate('cn.install.index.file.nginx.access.keyword') ?></label>
-					<input type="text" name="nginxAccessKeyword" value="access" class="form-control" />
-				</div>
+			<?php endif; ?>
+
+			<h4><?= Language::translate('cn.install.index.file.nginx.error.title') ?></h4>
+
+			<div class="form-group">
+				<label><?= Language::translate('cn.install.index.file.nginx.error.dir') ?></label>
+				<input type="text" name="nginxErrorPath" value="/var/log/nginx" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label><?= Language::translate('cn.install.index.file.nginx.error.keyword') ?></label>
+				<input type="text" name="nginxErrorKeyword" value="error" class="form-control" />
 			</div>
 		</div>
+
+		<div class="well installContainer" id="boxNginxAccess">
+			<?php if ($this->_view['error']['nginxAccess'] == true): ?>
+				<div class="alert alert-danger">
+					<strong><?= Language::translate('cn.install.index.file.message.error.title') ?></strong><br />
+					<?= Language::translate('cn.install.index.file.message.error.body') ?>
+				</div>
+			<?php endif; ?>
+
+			<h4><?= Language::translate('cn.install.index.file.nginx.access.title') ?></h4>
+
+			<div class="form-group">
+				<label><?= Language::translate('cn.install.index.file.nginx.access.dir') ?></label>
+				<input type="text" name="nginxAccessPath" value="/var/log/nginx" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label><?= Language::translate('cn.install.index.file.nginx.access.keyword') ?></label>
+				<input type="text" name="nginxAccessKeyword" value="access" class="form-control" />
+			</div>
+		</div>
+		<br class="clear" />
 	</div>
 
 	<input type="submit" class="btn btn-primary btn-lg" value="<?= Language::translate('cn.install.index.btn.install') ?>" <?= (array_search(false, $this->_view['permission']) !== false) ? 'disabled="disabled"' : '' ?> />
 	<br /><br />
 </form>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('input[type="checkbox"]').on('change', function() {
+			var element = $('#' + $(this).data('id'));
+			if (element.css('display') === 'none') {
+				element.fadeIn();
+			} else {
+				element.fadeOut();
+			}
+		});
+
+<?php $post = filter_input_array(INPUT_POST); ?>
+<?php if (array_key_exists('chApacheError', $post)): ?>
+			$('input[name="chApacheError"]').click();
+<?php endif; if (array_key_exists('chApacheAccess', $post)): ?>
+			$('input[name="chApacheAccess"]').click();
+<?php endif; if(array_key_exists('chNginxError', $post)): ?>
+			$('input[name="chNginxError"]').click();
+<?php endif; if(array_key_exists('chNginxAccess', $post)): ?>
+			$('input[name="chNginxAccess"]').click();
+<?php endif; ?>
+	});
+</script>

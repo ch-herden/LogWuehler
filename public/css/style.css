@@ -16,3 +16,17 @@ html, body { height: 100%; }
 #logTable tr td:first-child, #logTable tr td:nth-child(2) { word-break: normal; }
 
 .logOverview { margin-top:50px; }
+
+#installForms {
+    width: 1160px;
+}
+.installContainer {
+    float:left;
+    display: none;
+    margin-right: 20px;
+    width:270px;
+}
+
+.clear {
+    clear: both;
+}
