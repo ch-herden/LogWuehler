@@ -42,10 +42,10 @@ class LogController {
 	 * Init mappers
 	 */
 	public function __construct() {
-		$this->_apacheErrorMapper = new Mapper\ApacheError();
-		$this->_apacheAccessMapper = new Mapper\ApacheAccess();
-		$this->_nginxErrorMapper = new Mapper\NginxError();
-		$this->_nginxAccessMapper = new Mapper\NginxAccess();
+		$this->_apacheErrorMapper = Mapper\ApacheError::getInstance();
+		$this->_apacheAccessMapper = Mapper\ApacheAccess::getInstance();
+		$this->_nginxErrorMapper = Mapper\NginxError::getInstance();
+		$this->_nginxAccessMapper = Mapper\NginxAccess::getInstance();
 	}
 
 	/**
@@ -80,16 +80,16 @@ class LogController {
 	 */
 	public function dataAction() {
 		switch (filter_input(INPUT_GET, 'filetype')) {
-			case 'apache.error':
+			case Mapper\ApacheError::KEYWORD:
 				$mapper = $this->_apacheErrorMapper;
 				break;
-			case 'apache.access':
+			case Mapper\ApacheAccess::KEYWORD:
 				$mapper = $this->_apacheAccessMapper;
 				break;
-			case 'nginx.error':
+			case Mapper\NginxError::KEYWORD:
 				$mapper = $this->_nginxErrorMapper;
 				break;
-			case 'nginx.access':
+			case Mapper\NginxAccess::KEYWORD:
 				$mapper = $this->_nginxAccessMapper;
 				break;
 		}

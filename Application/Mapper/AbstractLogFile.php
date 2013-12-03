@@ -11,7 +11,7 @@ use Application\Model;
  * @copyright (c) 2013, Chris Herden
  * @license http://opensource.org/licenses/MIT
  */
-abstract class LogFile {
+abstract class AbstractLogFile {
 
 	/**
 	 * Ini keyword
@@ -22,9 +22,15 @@ abstract class LogFile {
 	/**
 	 * Construct
 	 */
-	public function __construct() {
+	protected function __construct() {
 		$this->_iniKey = $this->_getKeyword();
 	}
+
+	/**
+	 * Singleton
+	 * @return \Application\Mapper\AbstractLogFile
+	 */
+	abstract public function getInstance();
 
 	/**
 	 * Get keyword from ini file
@@ -39,79 +45,15 @@ abstract class LogFile {
 	abstract public function getProperties();
 
 	/**
-	 * Get an entry of a log file
-	 * @param String $line
-	 * @param String $timeStart
-	 * @param String $timeEnd
-	 * @param String $term
-	 * @return boolean | array
-	 */
-	abstract protected function _getEntry($line, $timeStart, $timeEnd, $term);
-
-	/**
-	 * Get entries of a log file in an array
-	 * @param String $file
-	 * @param String $timeStart
-	 * @param String $timeEnd
-	 * @param String $term
-	 * @return array | boolean
-	 */
-	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
-		$entries = array();
-
-		$fileArr = explode(".", $file);
-		if ($fileArr[count($fileArr) - 1] === 'gz') {
-			$handle = gzopen($file, "r");
-			if(is_bool($handle)) {
-				return false;
-			}
-			while (!gzeof($handle)) {
-				$line = gzgets($handle, 4096);
-				if ($line === false) {
-					continue;
-				}
-
-				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
-				if (is_array($result)) {
-					$entries[] = $result;
-				}
-			}
-
-			gzclose($handle);
-		} else {
-			$handle = fopen($file, "r");
-			if(is_bool($handle)) {
-				return false;
-			}
-			while (!feof($handle)) {
-				$line = fgets($handle);
-				if ($line === false) {
-					continue;
-				}
-
-
-				$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
-				if (is_array($result)) {
-					$entries[] = $result;
-				}
-			}
-
-			fclose($handle);
-		}
-
-		return $entries;
-	}
-
-	/**
 	 * Get list of log files
 	 * @return array | null
 	 */
 	public function getFileList() {
 		$config = parse_ini_file(APPLICATION_PATH . '/Application/config/app.ini', true);
-		if(!array_key_exists($this->_iniKey, $config)) {
+		if (!array_key_exists($this->_iniKey, $config)) {
 			return null;
 		}
-		
+
 		$path = $config[$this->_iniKey]['path'];
 		$keyword = $config[$this->_iniKey]['keyword'];
 
@@ -170,6 +112,99 @@ abstract class LogFile {
 	}
 
 	/**
+	 * Get an entry of a log file
+	 * @param String $line
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
+	 * @return boolean | array
+	 */
+	abstract protected function _getEntry($line, $timeStart, $timeEnd, $term);
+	
+	/**
+	 * Get entries of a log file in an array of models
+	 * @param String $file
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
+	 * @return \Application\Model\AbstractLogFile[] | boolean
+	 */
+	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
+		$entries = array();
+
+		$fileArr = explode(".", $file);
+		if ($fileArr[count($fileArr) - 1] === 'gz') {
+			$entries = $this->_getCompressedLogEntries($file, $timeStart, $timeEnd, $term);
+		} else {
+			$entries = $this->_getNormalLogEntries($file, $timeStart, $timeEnd, $term);
+		}
+
+		return $entries;
+	}
+
+	/**
+	 * Get normal log entries
+	 * @param String $file
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
+	 * @return \Application\Model\AbstractLogFile[] | boolean
+	 */
+	protected function _getNormalLogEntries($file, $timeStart, $timeEnd, $term) {
+		$handle = fopen($file, "r");
+		if ($handle === false) {
+			return false;
+		}
+
+		$entries = array();
+		while (!feof($handle)) {
+			$line = fgets($handle);
+			if ($line === false) {
+				continue;
+			}
+
+			$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
+			if (is_array($result)) {
+				$entries[] = $result;
+			}
+		}
+		fclose($handle);
+		
+		return $entries;
+	}
+
+	/**
+	 * Get compressed log entries
+	 * @param String $file
+	 * @param String $timeStart
+	 * @param String $timeEnd
+	 * @param String $term
+	 * @return \Application\Model\AbstractLogFile[] | boolean
+	 */
+	protected function _getCompressedLogEntries($file, $timeStart, $timeEnd, $term) {
+		$handle = gzopen($file, "r");
+		if ($handle === false) {
+			return false;
+		}
+		
+		$entries = array();
+		while (!gzeof($handle)) {
+			$line = gzgets($handle, 4096);
+			if ($line === false) {
+				continue;
+			}
+			
+			$result = $this->_getEntry($line, $timeStart, $timeEnd, $term);
+			if (is_array($result)) {
+				$entries[] = $result;
+			}
+		}
+		gzclose($handle);
+		
+		return $entries;
+	}
+	
+	/**
 	 * Validate time
 	 * @param int $time
 	 * @param String $startTime
@@ -204,5 +239,4 @@ abstract class LogFile {
 
 		return false;
 	}
-
 }

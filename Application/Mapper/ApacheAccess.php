@@ -11,14 +11,25 @@ use Application\Helper\Language;
  * @copyright (c) 2013, Chris Herden
  * @license http://opensource.org/licenses/MIT
  */
-class ApacheAccess extends LogFile {
+class ApacheAccess extends AbstractLogFile {
+
+	/**
+	 * Ini keyword
+	 */
+	const KEYWORD = 'apache.access';
+	
+	/**
+	 * Instance
+	 * @var \Application\Mapper\ApacheError 
+	 */
+	private static $_instance;
 
 	/**
 	 * Get keyword from ini file
 	 * @return String ini file key
 	 */
 	protected function _getKeyword() {
-		return 'apache.access';
+		return self::KEYWORD;
 	}
 
 	/**
@@ -36,6 +47,18 @@ class ApacheAccess extends LogFile {
 		);
 	}
 
+	/**
+	 * Singleton
+	 * @return \Application\Mapper\ApacheError 
+	 */
+	public function getInstance() {
+		if (!isset(self::$_instance)) {
+			$className = __CLASS__;
+			self::$_instance = new $className;
+		}
+		return self::$_instance;
+	}
+	
 	/**
 	 * Get an entry of a log file
 	 * @param String $line

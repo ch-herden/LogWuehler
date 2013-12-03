@@ -11,8 +11,27 @@ use Application\Helper\Language;
  * @copyright (c) 2013, Chris Herden
  * @license http://opensource.org/licenses/MIT
  */
-class NginxError extends LogFile {
+class NginxError extends AbstractLogFile {
 
+	/**
+	 * Ini keyword
+	 */
+	const KEYWORD = 'nginx.error';
+	
+	/**
+	 * Instance
+	 * @var \Application\Mapper\ApacheError 
+	 */
+	private static $_instance;
+
+	/**
+	 * Get keyword from ini file
+	 * @return String ini file key
+	 */
+	protected function _getKeyword() {
+		return self::KEYWORD;
+	}
+	
 	/**
 	 * Get log properties
 	 * @return array
@@ -26,11 +45,15 @@ class NginxError extends LogFile {
 	}
 
 	/**
-	 * Get keyword from ini file
-	 * @return String ini file key
+	 * Singleton
+	 * @return \Application\Mapper\ApacheError 
 	 */
-	protected function _getKeyword() {
-		return 'nginx.error';
+	public function getInstance() {
+		if (!isset(self::$_instance)) {
+			$className = __CLASS__;
+			self::$_instance = new $className;
+		}
+		return self::$_instance;
 	}
 
 	/**
