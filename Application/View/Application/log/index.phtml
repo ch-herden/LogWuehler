@@ -17,6 +17,20 @@
 			</a>
 		</li>
 	<?php endif; ?>
+	<?php if ($this->_view['nginxErrorLogFiles'] !== null): ?>
+		<li>
+			<a href="#nginxErrorTab" data-toggle="tab">
+				<?= Language::translate('cn.log.index.nginx.error') ?>
+			</a>
+		</li>
+	<?php endif; ?>
+	<?php if ($this->_view['nginxAccessLogFiles'] !== null): ?>
+		<li>
+			<a href="#nginxAccessTab" data-toggle="tab">
+				<?= Language::translate('cn.log.index.nginx.access') ?>
+			</a>
+		</li>
+	<?php endif; ?>
 </ul>
 
 <div class="tab-content">
@@ -52,11 +66,42 @@
 			</table>
 		</div>
 	<?php endif; ?>
+	<?php if ($this->_view['nginxErrorLogFiles'] !== null): ?>
+		<div class="tab-pane" id="nginxErrorTab">
+			<table class="table logOverview" id="nginxError">
+				<?php foreach ($this->_view['nginxErrorLogFiles'] as $file): ?>
+					<tr>
+						<td>
+							<p><a href="/log/show?dir=<?= base64_encode($file->getPath()) ?>&file=nginx.error"><?= $file->getName() ?></a></p>
+						</td>
+						<td class="text-right">
+							<?= \Application\Helper\File::formatFilesize($file->getSize()) ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	<?php endif; ?>
+	<?php if ($this->_view['nginxAccessLogFiles'] !== null): ?>
+		<div class="tab-pane" id="nginxAccessTab">
+			<table class="table logOverview" id="nginxAccess">
+				<?php foreach ($this->_view['nginxAccessLogFiles'] as $file): ?>
+					<tr>
+						<td>
+							<p><a href="/log/show?dir=<?= base64_encode($file->getPath()) ?>&file=nginx.access"><?= $file->getName() ?></a></p>
+						</td>
+						<td class="text-right">
+							<?= \Application\Helper\File::formatFilesize($file->getSize()) ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	<?php endif; ?>
 </div>
 
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.nav-tabs a:first').tab('show');
 	});
-
 </script>

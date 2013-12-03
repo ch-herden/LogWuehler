@@ -54,7 +54,7 @@ abstract class LogFile {
 	 * @param String $timeStart
 	 * @param String $timeEnd
 	 * @param String $term
-	 * @return array
+	 * @return array | boolean
 	 */
 	public function getLogEntries($file, $timeStart, $timeEnd, $term) {
 		$entries = array();
@@ -62,6 +62,9 @@ abstract class LogFile {
 		$fileArr = explode(".", $file);
 		if ($fileArr[count($fileArr) - 1] === 'gz') {
 			$handle = gzopen($file, "r");
+			if(is_bool($handle)) {
+				return false;
+			}
 			while (!gzeof($handle)) {
 				$line = gzgets($handle, 4096);
 				if ($line === false) {
@@ -77,6 +80,9 @@ abstract class LogFile {
 			gzclose($handle);
 		} else {
 			$handle = fopen($file, "r");
+			if(is_bool($handle)) {
+				return false;
+			}
 			while (!feof($handle)) {
 				$line = fgets($handle);
 				if ($line === false) {
