@@ -71,7 +71,7 @@ class NginxError extends AbstractLogFile {
 		}
 
 		$line = substr($line, 20);
-		if(strpos($line, ', client:')) {
+		if(strpos($line, ', client:') !== false) {
 			$errorStr = explode(': ', strstr($line, ', client:', true), 2);
 		} else {
 			$errorStr = explode(': ', $line, 2);
