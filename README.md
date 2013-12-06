@@ -30,39 +30,37 @@ LogWuehler is an open source software to show different types of log files in a 
 + Optional: Modify vhost file for http authentication
 
 Nginx vhost example width https and http authentication
---------------------------------------------------------------------------------
-server {
-    server_name [servername];
-    listen 80;
-    listen 443 ssl;
+    server {
+        server_name [servername];
+        listen 80;
+        listen 443 ssl;
 
-    if ($ssl_protocol = "") {
-        rewrite ^ https://$server_name$request_uri? permanent;
+        if ($ssl_protocol = "") {
+            rewrite ^ https://$server_name$request_uri? permanent;
+        }
+
+        ssl_certificate /etc/nginx/ssl/server.crt;
+        ssl_certificate_key /etc/nginx/ssl/server.key;
+
+        access_log [path to access log file];
+        error_log [path to error log file];
+
+        root [path to public folder];
+
+        auth_basic "Restricted";
+        auth_basic_user_file [path to htpasswd];
+
+        index index.html;
+        try_files $uri @virtual;
+
+        location @virtual {
+            index index.php;
+            include fastcgi_params;
+            fastcgi_param   SCRIPT_FILENAME         $document_root/index.php;
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+            fastcgi_index index.php;
+        }
     }
-
-    ssl_certificate /etc/nginx/ssl/server.crt;
-    ssl_certificate_key /etc/nginx/ssl/server.key;
-
-    access_log [path to access log file];
-    error_log [path to error log file];
-
-    root [path to public folder];
-
-    auth_basic "Restricted";
-    auth_basic_user_file [path to htpasswd];
-
-    index index.html;
-    try_files $uri @virtual;
-
-    location @virtual {
-        index index.php;
-        include fastcgi_params;
-        fastcgi_param   SCRIPT_FILENAME         $document_root/index.php;
-        fastcgi_pass unix:/var/run/php5-fpm.sock;
-        fastcgi_index index.php;
-    }
-}
---------------------------------------------------------------------------------
 
 ### Supported languages
 + German
