@@ -71,7 +71,12 @@ class NginxError extends AbstractLogFile {
 		}
 
 		$line = substr($line, 20);
-		$errorStr = explode(': ', strstr($line, ', client:', true), 2);
+		if(strpos($line, ', client:')) {
+			$errorStr = explode(': ', strstr($line, ', client:', true), 2);
+		} else {
+			$errorStr = explode(': ', $line, 2);
+		}
+		
 		$message = $this->_validateMessage($errorStr[1], $term);
 		if ($message === false) {
 			return false;
@@ -79,7 +84,7 @@ class NginxError extends AbstractLogFile {
 		
 		$matches = array();
 		preg_match("|\[([a-z]+)\] (\d+)#(\d+)|", $errorStr[0], $matches);
-
+		
 		return array(
 			date("d.m.Y H:i:s", $time),
 			$matches[1],
