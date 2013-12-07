@@ -66,6 +66,13 @@ Nginx vhost example width https and http authentication
 ### Supported languages
 + German
 
+### Changelog
+#### 1.1
++ Add support for Nginx web server
++ Add support for Nginx Error Logs
++ Add support for Nginx Access Logs
++ Bugfixing
+
 ### Feedback
 Any feedback, suggestions, criticism, doesn't matter if good or not?
 Add an issue or send me an email (contact@chris-herden.de) to improve the software!
