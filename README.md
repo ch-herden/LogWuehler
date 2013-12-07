@@ -69,8 +69,8 @@ Nginx vhost example width https and http authentication
 ### Changelog
 #### 1.1
 + Add support for Nginx web server
-+ Add support for Nginx Error Logs
-+ Add support for Nginx Access Logs
++ Add support for Nginx Error Log files
++ Add support for Nginx Access Log files
 + Bugfixing
 
 ### Feedback

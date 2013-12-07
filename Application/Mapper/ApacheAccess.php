@@ -72,7 +72,7 @@ class ApacheAccess extends AbstractLogFile {
 		if (!is_array($data)) {
 			return false;
 		}
-		
+		return false;
 		$time = strtotime(ltrim(rtrim($data[3] . ' ' . $data[4], ']'), '['));
 		if (true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
 			return false;
