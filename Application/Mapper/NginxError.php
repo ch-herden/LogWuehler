@@ -50,8 +50,7 @@ class NginxError extends AbstractLogFile {
 	 */
 	public function getInstance() {
 		if (!isset(self::$_instance)) {
-			$className = __CLASS__;
-			self::$_instance = new $className;
+			self::$_instance = new NginxError();
 		}
 		return self::$_instance;
 	}

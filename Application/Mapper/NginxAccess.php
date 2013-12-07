@@ -53,8 +53,7 @@ class NginxAccess extends AbstractLogFile {
 	 */
 	public function getInstance() {
 		if (!isset(self::$_instance)) {
-			$className = __CLASS__;
-			self::$_instance = new $className;
+			self::$_instance = new NginxAccess();
 		}
 		return self::$_instance;
 	}
