@@ -29,7 +29,7 @@ LogWuehler is an open source software to show different types of log files in a 
 + Add rewrite entry in vhost file
 + Optional: Modify vhost file for http authentication
 
-Nginx vhost example width https and http authentication
+Nginx vhost example with https and http authentication
 
     server {
         server_name [servername];
