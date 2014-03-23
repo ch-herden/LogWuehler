@@ -5,19 +5,19 @@ namespace Application\Mapper;
 use Application\Helper\Language;
 
 /**
- * Apache access log file mapper
+ * Nginx access log file mapper
  * 
  * @author Chris Herden <contact@chris-herden.de>
  * @copyright (c) 2013, Chris Herden
  * @license http://opensource.org/licenses/MIT
  */
-class ApacheAccess extends AbstractLogFile {
+class NginxAccess extends AbstractLogFile {
 
 	/**
 	 * Ini keyword
 	 */
-	const KEYWORD = 'apache.access';
-
+	const KEYWORD = 'nginx.access';
+	
 	/**
 	 * Instance
 	 * @var \Application\Mapper\ApacheError 
@@ -31,19 +31,19 @@ class ApacheAccess extends AbstractLogFile {
 	protected function _getKeyword() {
 		return self::KEYWORD;
 	}
-
+	
 	/**
 	 * Get log properties
 	 * @return array
 	 */
 	public function getProperties() {
 		return array(
-			Language::translate('cn.log.show.table.head.apache.access.ip'),
-			Language::translate('cn.log.show.table.head.apache.access.time'),
-			Language::translate('cn.log.show.table.head.apache.access.request'),
-			Language::translate('cn.log.show.table.head.apache.access.code'),
-			Language::translate('cn.log.show.table.head.apache.access.referer'),
-			Language::translate('cn.log.show.table.head.apache.access.useragent')
+			Language::translate('cn.log.show.table.head.nginx.access.ip'),
+			Language::translate('cn.log.show.table.head.nginx.access.time'),
+			Language::translate('cn.log.show.table.head.nginx.access.request'),
+			Language::translate('cn.log.show.table.head.nginx.access.code'),
+			Language::translate('cn.log.show.table.head.nginx.access.referer'),
+			Language::translate('cn.log.show.table.head.nginx.access.useragent')
 		);
 	}
 
@@ -53,7 +53,7 @@ class ApacheAccess extends AbstractLogFile {
 	 */
 	public function getInstance() {
 		if (!isset(self::$_instance)) {
-			self::$_instance = new ApacheAccess();
+			self::$_instance = new NginxAccess();
 		}
 		return self::$_instance;
 	}
@@ -77,7 +77,7 @@ class ApacheAccess extends AbstractLogFile {
 			return false;
 		}
 
-		if ($this->_validateMessage($data['9'], $term) === false && $this->_validateMessage($data[0], $term) === false) {
+		if ($this->_validateMessage($data['9'], $term) === false && $this->_validateMessage($data[8], $term) === false && $this->_validateMessage($data[5], $term) === false) {
 			return false;
 		}
 

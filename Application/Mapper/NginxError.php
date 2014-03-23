@@ -5,19 +5,19 @@ namespace Application\Mapper;
 use Application\Helper\Language;
 
 /**
- * Apache access log file mapper
+ * Nginx error log file mapper
  * 
  * @author Chris Herden <contact@chris-herden.de>
  * @copyright (c) 2013, Chris Herden
  * @license http://opensource.org/licenses/MIT
  */
-class ApacheAccess extends AbstractLogFile {
+class NginxError extends AbstractLogFile {
 
 	/**
 	 * Ini keyword
 	 */
-	const KEYWORD = 'apache.access';
-
+	const KEYWORD = 'nginx.error';
+	
 	/**
 	 * Instance
 	 * @var \Application\Mapper\ApacheError 
@@ -31,19 +31,16 @@ class ApacheAccess extends AbstractLogFile {
 	protected function _getKeyword() {
 		return self::KEYWORD;
 	}
-
+	
 	/**
 	 * Get log properties
 	 * @return array
 	 */
 	public function getProperties() {
 		return array(
-			Language::translate('cn.log.show.table.head.apache.access.ip'),
-			Language::translate('cn.log.show.table.head.apache.access.time'),
-			Language::translate('cn.log.show.table.head.apache.access.request'),
-			Language::translate('cn.log.show.table.head.apache.access.code'),
-			Language::translate('cn.log.show.table.head.apache.access.referer'),
-			Language::translate('cn.log.show.table.head.apache.access.useragent')
+			Language::translate('cn.log.show.table.head.nginx.error.time'),
+			Language::translate('cn.log.show.table.head.nginx.error.level'),
+			Language::translate('cn.log.show.table.head.nginx.error.message')
 		);
 	}
 
@@ -53,7 +50,7 @@ class ApacheAccess extends AbstractLogFile {
 	 */
 	public function getInstance() {
 		if (!isset(self::$_instance)) {
-			self::$_instance = new ApacheAccess();
+			self::$_instance = new NginxError();
 		}
 		return self::$_instance;
 	}
@@ -67,27 +64,30 @@ class ApacheAccess extends AbstractLogFile {
 	 * @return boolean | array
 	 */
 	protected function _getEntry($line, $timeStart, $timeEnd, $term) {
-		$data = str_getcsv($line, " ", '"', '\\');
-		if (!is_array($data)) {
-			return false;
-		}
-
-		$time = strtotime(ltrim(rtrim($data[3] . ' ' . $data[4], ']'), '['));
+		$time = strtotime(substr($line, 0, 19));
 		if (true !== $this->_validateTime($time, $timeStart, $timeEnd)) {
 			return false;
 		}
 
-		if ($this->_validateMessage($data['9'], $term) === false && $this->_validateMessage($data[0], $term) === false) {
+		$line = substr($line, 20);
+		if(strpos($line, ', client:') !== false) {
+			$errorStr = explode(': ', strstr($line, ', client:', true), 2);
+		} else {
+			$errorStr = explode(': ', $line, 2);
+		}
+		
+		$message = $this->_validateMessage($errorStr[1], $term);
+		if ($message === false) {
 			return false;
 		}
-
+		
+		$matches = array();
+		preg_match("|\[([a-z]+)\] (\d+)#(\d+)|", $errorStr[0], $matches);
+		
 		return array(
-			$data[0],
 			date("d.m.Y H:i:s", $time),
-			$data[5],
-			$data[6],
-			$data[8],
-			$data[9]
+			$matches[1],
+			$message
 		);
 	}
 

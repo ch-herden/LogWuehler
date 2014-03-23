@@ -14,23 +14,38 @@ use Application\Mapper;
 class LogController {
 
 	/**
-	 * Apache error Mapper
+	 * Apache error mapper
 	 * @var \Application\Mapper\ApacheError
 	 */
 	protected $_apacheErrorMapper;
 
 	/**
-	 * Apache access Mapper
+	 * Apache access mapper
 	 * @var \Application\Mapper\ApacheAccess
 	 */
 	protected $_apacheAccessMapper;
 
 	/**
+	 * Nginx error mapper
+	 * @var \Application\Mapper\NginxError
+	 */
+	protected $_nginxErrorMapper;
+	
+	/**
+	 * Nginx access mapper
+	 * @var \Application\Mapper\NginxAccess
+	 */
+	protected $_nginxAccessMapper;
+
+
+	/**
 	 * Init mappers
 	 */
 	public function __construct() {
-		$this->_apacheErrorMapper = new Mapper\ApacheError();
-		$this->_apacheAccessMapper = new Mapper\ApacheAccess();
+		$this->_apacheErrorMapper = Mapper\ApacheError::getInstance();
+		$this->_apacheAccessMapper = Mapper\ApacheAccess::getInstance();
+		$this->_nginxErrorMapper = Mapper\NginxError::getInstance();
+		$this->_nginxAccessMapper = Mapper\NginxAccess::getInstance();
 	}
 
 	/**
@@ -40,7 +55,9 @@ class LogController {
 	public function indexAction() {
 		return array(
 			'apacheErrorLogFiles' => $this->_apacheErrorMapper->getFileList(),
-			'apacheAccessLogFiles' => $this->_apacheAccessMapper->getFileList()
+			'apacheAccessLogFiles' => $this->_apacheAccessMapper->getFileList(),
+			'nginxErrorLogFiles' => $this->_nginxErrorMapper->getFileList(),
+			'nginxAccessLogFiles' => $this->_nginxAccessMapper->getFileList()
 		);
 	}
 
@@ -63,11 +80,17 @@ class LogController {
 	 */
 	public function dataAction() {
 		switch (filter_input(INPUT_GET, 'filetype')) {
-			case 'apache.error':
+			case Mapper\ApacheError::KEYWORD:
 				$mapper = $this->_apacheErrorMapper;
 				break;
-			case 'apache.access':
+			case Mapper\ApacheAccess::KEYWORD:
 				$mapper = $this->_apacheAccessMapper;
+				break;
+			case Mapper\NginxError::KEYWORD:
+				$mapper = $this->_nginxErrorMapper;
+				break;
+			case Mapper\NginxAccess::KEYWORD:
+				$mapper = $this->_nginxAccessMapper;
 				break;
 		}
 

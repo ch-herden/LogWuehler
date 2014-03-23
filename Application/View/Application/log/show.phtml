@@ -44,6 +44,9 @@
 	<div id="jsContentFailed" class="text-center hide">
 		<?= Language::translate('cn.log.show.completed.error') ?>
 	</div>
+	<div id="jsContentFailedRead" class="text-center hide">
+		<?= Language::translate('cn.log.show.completed.error.read') ?>
+	</div>
 	<div id="jsContentSuccess" class="hide">
 		<table class="table table-bordered jsContent" id="logTable">
 			<thead></thead>
@@ -107,6 +110,10 @@
 				$('.well.jsContent > div').addClass('hide');
 				$('#jsContentFailed').removeClass('hide');
 			},
+			showReadError: function() {
+				$('.well.jsContent > div').addClass('hide');
+				$('#jsContentFailedRead').removeClass('hide');
+			},
 			showNoResult: function() {
 				$('.well.jsContent > div').addClass('hide');
 				$('#jsContentNoResult').removeClass('hide');
@@ -122,6 +129,11 @@
 			putContentInTable: function(data) {
 				var header = '<tr>';
 				var content = '';
+
+				if(data.content === false) {
+					this.showReadError();
+					return;
+				}
 
 				if (data.content.length < 1) {
 					this.showNoResult();

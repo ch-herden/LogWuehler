@@ -11,14 +11,25 @@ use Application\Helper\Language;
  * @copyright (c) 2013, Chris Herden
  * @license http://opensource.org/licenses/MIT
  */
-class ApacheError extends LogFile {
+class ApacheError extends AbstractLogFile {
+
+	/**
+	 * Ini keyword
+	 */
+	const KEYWORD = 'apache.error';
+	
+	/**
+	 * Instance
+	 * @var \Application\Mapper\ApacheError 
+	 */
+	private static $_instance;
 
 	/**
 	 * Get keyword from ini file
 	 * @return String ini file key
 	 */
 	protected function _getKeyword() {
-		return 'apache.error';
+		return self::KEYWORD;
 	}
 
 	/**
@@ -31,6 +42,17 @@ class ApacheError extends LogFile {
 			Language::translate('cn.log.show.table.head.apache.error.level'),
 			Language::translate('cn.log.show.table.head.apache.error.message')
 		);
+	}
+
+	/**
+	 * Singleton
+	 * @return \Application\Mapper\ApacheError 
+	 */
+	public function getInstance() {
+		if (!isset(self::$_instance)) {
+			self::$_instance = new ApacheError();
+		}
+		return self::$_instance;
 	}
 
 	/**
